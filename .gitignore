@@ -341,7 +341,4 @@ healthchecksdb
 /Chaka.Api.Organization/Controllers/LocationClassificationController.cs
 /Class2.cs
 /Class1.cs
-/Chaka.Database.Context/Models/CityDeprecated.cs
-/Chaka.Database.Context/Models/CountryDeprecated.cs
-/Chaka.Database.Context/Models/Province.cs
-/Chaka.Database.Context/Models/ProvinceDeprecated.cs
+
