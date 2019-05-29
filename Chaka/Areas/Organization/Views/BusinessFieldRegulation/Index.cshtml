@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Education University";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+
+<div class="head-section content-padding">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">General</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Business Field Regulation</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+
+                @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "general-table-form" }))
+                {
+                    @Html.ListBox("list-all-item", new List<SelectListItem>())
+                    @Html.ListBox("list-check", new List<SelectListItem>())
+
+                    <div class="btn-group" style="margin-bottom:5px">
+                        <a href="javascript:;" class="btn btn-primary" id="btnAddNew" style="font-size:12px;"><i class="fa fa-plus"></i> Add New</a> &nbsp;
+                        <button type="submit" class="btn btn-danger" id="btnDelete" name="btnDelete"><i class="fa fa-minus"></i> Delete</button>
+                    </div>
+                    @(Html.Kendo().Grid<Chaka.ViewModels.Organization.BusinessFieldRegulation.ListBusinessFieldRegulationViewModel>
+                           ()
+                           .Name("grid")
+                           .Columns(col =>
+                           {
+                               col.Bound("").ClientHeaderTemplate(@"<input type='checkbox' id='chkAll' onclick='checkAll()'/>")
+                              .ClientTemplate(@"<input type='checkbox' class='Check' name='chkDelete' value='#=ID#' data-id='#=ID#' />")
+                              .Width(50).HtmlAttributes(new { Class = "check-box-column" });
+                               col.Bound(p => p.Code).Title("Code");
+                               col.Bound(p => p.Name).Title("Name");
+                               col.Bound(p => p.Description).Title("Description");
+                               col.Bound(p => p.AppointedDate).Format("{0:dd MMMM yyyy}").Title("Appointed Date");
+                               col.Bound(p => p.IsActive).Title("Is Active");
+                               col.Bound("").ClientTemplate("<a data-id='#=ID#' href='javascript:;' class='btn btn-success  editRow'>Edit</a>" +
+                                   "<a data-id='#=ID#' href='" + Url.Action("IndexCategory", "BusinessFieldRegulation", new { BusinessFieldRegulationID = "#=ID#" }) + "' class='btn btn-warning'>Category</a>").Width(100).Title("").Filterable(false);
+                               
+                           })
+                                 .PersistSelection()
+                                 .Pageable()
+                                 .Sortable()
+                                 .Filterable()
+                                 .DataSource(dataSource => dataSource
+                                 .Ajax()
+                                 .Read(read => read.Action("List", "BusinessFieldRegulation", new { area = "Organization" }))
+                                 )
+                    )
+                }
+            </div>
+        </div>
+        <div id="addEditWindow"></div>
+    </div>
+</div>
+
+<script>
+    var popup = (function (popup) {
+        popup.width = 600;
+        popup.height = 300;
+        popup.createUrl = "@Url.Action("Create")";
+        popup.editUrl = "@Url.Action("Edit")";
+        popup.deleteUrl = "@Url.Action("Delete")";
+        popup.createTitle = "Add Bussines Field Regulation";
+        popup.editTitle = "Edit Bussines Field Regulation";
+        return popup;
+    })(popup || {});
+</script>
+<script src="~/js/modules/pop-up.js"></script>
+
+
+

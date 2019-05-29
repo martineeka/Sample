@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Responsibility";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+<div class="head-section content-padding">
+    <h2 class="page-title">Responsibility</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">System Admin</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Responsibility</li>
+        </ol>
+    </nav>
+</div>
+
+
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+                @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "general-table-form" }))
+                {
+                    @Html.ListBox("list-all-item", new List<SelectListItem>())
+                    @Html.ListBox("list-check", new List<SelectListItem>())
+
+                    <div class="btn-group">
+                        <a href="javascript:;" class="btn btn-primary" id="btnAddNew"  style="font-size:12px;"><i class="fa fa-plus"></i> Add New</a>
+                        <button type="submit" class="btn btn-primary" id="btnDelete" name="btnDelete"><i class="fa fa-minus"></i> Delete</button>
+                    </div>
+                    @(Html.Kendo().Grid<Chaka.ViewModels.SystemAdmin.Responsibility.ListResponsibiltyViewModel>
+                           ()
+                           .Name("grid")
+                           .Columns(columns =>
+                           {
+                                 columns.Bound("").ClientHeaderTemplate(@"<input type='checkbox' id='chkAll' onclick='checkAll()'/>")
+                                   .ClientTemplate(@"<input type='checkbox' class='Check' name='chkDelete' value='#=ID#' data-id='#=ID#' />")
+                                   .Width(50).HtmlAttributes(new { Class = "check-box-column" });
+                                 columns.Bound("").ClientTemplate("<a data-id='#=ID#' href='javascript:;' class='btn btn-primary  editRow'>Edit</a>").Width(100).Title("").Filterable(false);
+                                 columns.Bound(m => m.Name).Width(250).Title("Name");
+                                 columns.Bound(m => m.LegalEntityName).Width(250).Title("Business Group");
+                                 columns.Bound(m => m.MenuName).Width(150).Title("Menu");
+                                 columns.Bound(m => m.IsActive).Width(150).Title("Is Active").ClientTemplate("#= IsActive ? 'Active' : 'Not Active' #"); ;
+                                 columns.Bound(m => m.Description).Title("Description").HtmlAttributes(new { Class = "row-description" }).Hidden();
+                                 })
+                                 .PersistSelection()
+                                 .Pageable()
+                                 .Sortable()
+                                 .Filterable()
+                                 //.Filterable(filter =>
+                                 // {
+                                 //     filter.Extra(false);
+                                 //     filter.Operators(op =>
+                                 //     {
+                                 //         op.ForString(str => str.Clear());
+                                 //         op.ForString(str =>
+                                 //         {
+                                 //             str.Clear().Contains("Contains");
+                                 //         });
+                                 //     });
+                                 // })
+                                 .DataSource(dataSource => dataSource
+                                 .Ajax()
+                                 .Read(read => read.Action("List", "Responsibility", new { area = "SystemAdmin" }))
+                                 )
+                    )
+                }
+            </div>
+        </div>
+        <div id="addEditWindow"></div>
+    </div>
+</div>
+
+
+
+<script>
+    var popup = (function (popup) {
+        popup.width = 600;
+        popup.createUrl = "@Url.Action("Create")";
+        popup.editUrl = "@Url.Action("Edit")";
+        popup.deleteUrl = "@Url.Action("Delete")";
+        popup.createTitle = "Add Responsibility";
+        popup.editTitle = "Edit Responsibility";
+        return popup;
+    })(popup || {});
+</script>
+<script src="~/js/modules/pop-up.js"></script>

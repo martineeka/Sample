@@ -1,0 +1,37 @@
+﻿
+@using Kendo.Mvc.UI
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<div class="row" id="viewModelWorkspace">
+    <div class="col-md-12">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "general-table-form" }))
+        {
+            @Html.ListBox("list-all-item", new List<SelectListItem>())
+            @Html.ListBox("list-check", new List<SelectListItem>())
+            <div class="grid-top-button">
+                <a href="javascript:;" class="btn btn-primary" id="btnAddNew"><i class="fa fa-plus"></i> Add New</a>
+            </div>
+        }
+    </div>
+
+    <div id="addEditWindow"></div>
+</div>
+
+
+<script>
+    var popup = (function (popup) {
+        popup.width = 600;
+        popup.createUrl = "@Url.Action("Create")";
+        popup.editUrl = "@Url.Action("Edit")";
+        popup.deleteUrl = "@Url.Action("Delete")";
+        popup.createTitle = "Add New User";
+        popup.editTitle = "Edit User"
+        return popup;
+    })(popup || {});
+</script>
+<script src="~/lib/modules/pop-up.js"></script>
+

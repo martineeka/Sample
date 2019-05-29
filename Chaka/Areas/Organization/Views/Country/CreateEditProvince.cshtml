@@ -1,0 +1,50 @@
+﻿@model Chaka.ViewModels.Organization.Country.CreateEditProvinceViewModel
+
+@using Kendo.Mvc.UI
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addEditForm", name = "addEditForm" }))
+{
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.CountryID)
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Code) </div>
+            <div class="col-md-8">
+                <input type="text" name="Code" class="form-control" value="@(Model.Code)" required="required" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Name)</div>
+            <div class="col-md-8">
+                <input type="text" name="Name" class="form-control" value="@(Model.Name)" required="required" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Description)</div>
+            <div class="col-md-8">
+                @Html.EditorFor(m => m.Description, "Description")
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.IsActive)</div>
+            <div class="col-md-8">
+                <input type="checkbox" name="IsActive" value="true" @(Model.IsActive ? "checked" : "")>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2"></div>
+            <div class="col-md-7">
+                <button type="submit" id="btnSave" name="btnSave" class="btn btn-primary">Save</button>
+                <button type="button" id="btnClose" name="btnClose" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $("#btnClose").click(popup.closeClick);
+        $("#btnSave").click(popup.saveClick);
+    });
+</script>

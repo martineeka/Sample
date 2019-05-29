@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Employee Information Restriction Group";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+
+
+<div class="head-section content-padding">
+    <h2 class="page-title">Employee Information Restriction Group</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">System Admin</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Employee Information Restriction Group</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+                @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "general-table-form" }))
+                {
+                @Html.ListBox("list-all-item", new List<SelectListItem>())
+                @Html.ListBox("list-check", new List<SelectListItem>())
+
+                <div class="btn-group">
+                    <a href="javascript:;" class="btn btn-primary" id="btnAddNew" style="font-size:12px;"><i class="fa fa-plus"></i> Add New</a>
+                    <button type="submit" class="btn btn-primary" id="btnDelete" name="btnDelete"><i class="fa fa-minus"></i> Delete</button>
+                </div>
+                @(Html.Kendo().Grid<Chaka.ViewModels.SystemAdmin.EmployeeInfoRestrictionGroup.ListViewModel>()
+                    .Name("grid")
+                    .Columns(col =>
+                    {
+                        col.Bound("").ClientHeaderTemplate(@"<input type='checkbox' id='chkAll' onclick='checkAll()'/>")
+                        .ClientTemplate(@"<input type='checkbox' class='Check' name='chkDelete' value='#=ID#' data-id='#=ID#' />")
+                        .Width(50).HtmlAttributes(new { Class = "check-box-column" });
+
+                        col.Bound("").ClientTemplate("<a data-id='#=ID#' href='javascript:;' class='btn btn-primary editRow' onclick='edit()'>Edit</a>"+"<a data-id='#=ID#' href='javascript:;' class='btn btn-primary editRow' onclick='restriction()'>Restriction</a>").Width(150).Title("").Filterable(false);
+                        //col.Bound("").ClientTemplate(@)
+                        //.Width(140).Title("").HtmlAttributes(new { Class = "button-column" });
+                        col.Bound(p => p.Code);
+                        col.Bound(p => p.Name);
+                        col.Bound("").ClientTemplate("#=IsActive ? 'Active':'Not Active' #");
+                        col.Bound(p => p.Description);
+                    })
+                    .PersistSelection()
+                    .Pageable()
+                    .Sortable()
+                    .Filterable()
+                    .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("List", "EmployeeInfoRestrictionGroup", new { area = "SystemAdmin" }))
+                    )
+                )
+                }
+            </div>
+        </div>
+        <div id="addEditWindow"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var popup = (function (popup) {
+        popup.width = 600;
+        popup.createUrl = "@Url.Action("Create")";
+        popup.editUrl = "@Url.Action("Edit")";
+        popup.deleteUrl = "@Url.Action("Delete")";
+        popup.createTitle = "Add Restriction";
+        popup.editTitle = "Edit Restriction";
+        return popup;
+    })(popup || {});
+
+    function restriction() {
+        popup.editUrl = "@Url.Action("EditRestriction")";
+    }
+    function edit() {
+        popup.editUrl = "@Url.Action("Edit")";
+    }
+    
+</script>
+<script src="~/js/modules/pop-up.js"></script>

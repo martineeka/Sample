@@ -1,0 +1,881 @@
+﻿@model Chaka.ViewModels.SystemAdmin.EmployeeFilter.ListEmployeeListFilter
+@{
+
+    ViewData["Title"] = "Employee Filter Function";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Kendo.Mvc.UI
+
+<div class="head-section content-padding">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">System Admin</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index","EmployeeFilter")">Employee Filter</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="#">Detail</a></li>
+        </ol>
+    </nav>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="content-wrapper">
+            <table class="table table-responsive">
+                <tr>
+                    <th>@Html.LabelFor(m => m.Code)</th>
+                    <td>@Model.Code</td>
+                </tr>
+                <tr>
+                    <th>@Html.LabelFor(m => m.Name)</th>
+                    <td>@Model.Name</td>
+                </tr>
+                <tr>
+                    <th>@Html.LabelFor(m => m.Description)</th>
+                    <td>@Model.Description</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid body-section bg-light-grey">
+    Model.ID
+    <div class="col-md-12">
+        @Html.HiddenFor(m => m.ID)
+        @*<div class="row">*@
+        <div class="content-wrapper">
+            @(Html.Kendo().PanelBar()
+                    .Name("panelbar")
+                    .ExpandMode(PanelBarExpandMode.Multiple)
+                    .Items(panelbar =>
+                    {
+                        panelbar.Add().Text("Filter Grade").Expanded(true).Content(
+                                                @<div>
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            @(Html.Kendo().Grid(Model.ListGrade).Name("gridGrade").HtmlAttributes(new { @class = "SourceGrade" })
+                                                                .Columns(columns =>
+                                                                {
+                                                                    columns.Bound(m => m.ID).Visible(false);
+                                                                    columns.Bound(m => m.Name);
+                                                                })
+                                                                .Pageable(s => s.Refresh(true))
+                                                                .Filterable()
+                                                                .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                                                                .PersistSelection(true)
+                                                                .Sortable()
+                                                                //.Filterable(f => { f.Mode(GridFilterMode.Row); f.Extra(false); f.Operators(op => op.ForString(str => str.Clear().Contains("contains"))); })
+                                                                .DataSource(ds => ds.Ajax().Read(r =>
+                                                                {
+                                                                    r.Action("ListUnselectedGrade", "EmployeeFilter", new { ID = Model.ID, area = "SystemAdmin" });
+                                                                    r.Data("getSelectedGrade");
+                                                                }))
+                                                            )
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <a class="btn btn-primary btnSelectGrade" href="javascript:;">select<i class="fa fa-long-arrow-right"></i></a>
+                                                            <a class="btn btn-primary btnDeselectGrade" href="javascript:;">Deselect<i class="fa fa-long-arrow-left"></i></a>
+                                                        </div>
+                                                        <div class="cold-md-5">
+                                                            @(Html.Kendo().Grid(Model.ListGradeSelected).Name("gridSelectedGrade").HtmlAttributes(new { @class = "TargetGrade" })
+                                                                .Columns(columns =>
+                                                                {
+                                                                    columns.Bound(m => m.ID).Visible(false);
+                                                                    columns.Bound(m => m.Name);
+                                                                })
+                                                                .Pageable(s => s.Refresh(true))
+                                                                .Filterable()
+                                                                .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                                                                .PersistSelection(true)
+                                                                .Sortable()
+                                                                //.Filterable(f => { f.Mode(GridFilterMode.Row); f.Extra(false); f.Operators(op => op.ForString(str => str.Clear().Contains("contains"))); })
+                                                                .DataSource(ds => ds.Ajax().Read(r =>
+                                                                {
+                                                                    r.Action("ListSelectedGade", "EmployeeFilter", new { ID = Model.ID, area = "SystemAdmin" });
+                                                                    r.Data("getUnselectedGrade");
+                                                                }))
+                                                            )
+                                                        </div>
+                                                    </div>
+                                                </div>
+  );
+
+  panelbar.Add().Text("Filter Level").Expanded(true).Content(
+                                                                                        @<div>
+                                                                                            <div class="row">
+                                                                                                <div class="col-md-5">
+                                                                                                    <div class="content-wrapper">
+                                                                                                        @(Html.Kendo().Grid(Model.ListLevel).Name("gridLevel").HtmlAttributes(new { @class = "SourceLevel" })
+                                                                                                            .Columns(columns =>
+                                                                                                                {
+                                                                                                                    columns.Bound(m => m.ID).Visible(false);
+                                                                                                                    columns.Bound(m => m.Code).Visible(false);
+                                                                                                                    columns.Bound(m => m.Name).Title("Name");
+                                                                                                                })
+                                                                                                            .Pageable(s => s.Refresh(true))
+                                                                                                                .Filterable()
+                                                                                                                .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                                                                                                                .PersistSelection(true)
+                                                                                                                .Sortable()
+                                                                                                                //.Filterable(f => { f.Mode(GridFilterMode.Row); f.Extra(false); f.Operators(op => op.ForString(str => str.Clear().Contains("contains"))); })
+                                                                                                                .DataSource(ds => ds.Ajax().Read(r =>
+                                                                                                                {
+                                                                                                                    r.Action("ListUnselectedLevel", "EmployeeFilter", new { ID = Model.ID, area = "SystemAdmin" });
+                                                                                                                    r.Data("getSelectedLevel");
+                                                                                                                }))
+                                                                                                        )
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-md-1">
+                                                                                                    <a class="btn btn-primary btnSelect btnSelectLevel" href="javascript:;">select<i class="fa fa-long-arrow-right"></i></a>
+                                                                                                    <a class="btn btn-primary btnDeselect btnDeselectLevel" href="javascript:;">Deselect<i class="fa fa-long-arrow-left"></i></a>
+                                                                                                </div>
+                                                                                                <div class="col-md-5">
+                                                                                                    <div class="content-wrapper">
+                                                                                                        @(Html.Kendo().Grid(Model.ListLevelSelected).Name("gridSelectedLevel").HtmlAttributes(new { @class = "TargetLevel" })
+                                                                                                                .Columns(columns =>
+                                                                                                                {
+                                                                                                                    //columns.Bound(m => m.DescriptionENG).Title("Function Name").Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").ShowOperators(false)));
+                                                                                                                    columns.Bound(m => m.ID).Visible(false);
+                                                                                                                    columns.Bound(m => m.Code).Title("Code").Visible(false);
+                                                                                                                    columns.Bound(m => m.Name).Title("Name");
+
+
+                                                                                                                })
+                                                                                                                .Pageable(s => s.Refresh(true))
+                                                                                                                .Filterable()
+                                                                                                                .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                                                                                                                .PersistSelection(true)
+                                                                                                                .Sortable()
+                                                                                                                //.Filterable(f => { f.Mode(GridFilterMode.Row); f.Extra(false); f.Operators(op => op.ForString(str => str.Clear().Contains("contains"))); })
+                                                                                                                .DataSource(ds => ds.Ajax().Read(r =>
+                                                                                                                {
+                                                                                                                    r.Action("ListSelectedLevel", "EmployeeFilter", new { ID = Model.ID, area = "SystemAdmin" });
+                                                                                                                    r.Data("getUnselectedLevel");
+                                                                                                                }))
+                                                                                                        )
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                          );
+
+                                          panelbar.Add().Text("Job Title").Expanded(false).Content(
+                                                                                                                                @<div>
+                                                                                                                                    <div class="row">
+                                                                                                                                        <div class="col-md-5">
+                                                                                                                                            @(Html.Kendo().Grid(Model.ListJobTitle).Name("gridJobTitle").HtmlAttributes(new { @class = "SourceJobTitle" })
+                                                                                                                                                .Columns(columns =>
+                                                                                                                                                    {
+                                                                                                                                                        columns.Bound(m => m.ID).Visible(false);
+                                                                                                                                                        columns.Bound(m => m.Code).Visible(false);
+                                                                                                                                                        columns.Bound(m => m.Name).Title("Name");
+                                                                                                                                                    })
+                                                                                                                                                .Pageable(s => s.Refresh(true))
+                                                                                                                                                    .Filterable()
+                                                                                                                                                    .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                                                                                                                                                    .PersistSelection(true)
+                                                                                                                                                    .Sortable()
+                                                                                                                                                    //.Filterable(f => { f.Mode(GridFilterMode.Row); f.Extra(false); f.Operators(op => op.ForString(str => str.Clear().Contains("contains"))); })
+                                                                                                                                                    .DataSource(ds => ds.Ajax().Read(r =>
+                                                                                                                                                    {
+                                                                                                                                                        r.Action("ListUnselectedJobTitle", "EmployeeFilter", new { ID = Model.ID, area = "SystemAdmin" });
+                                                                                                                                                        r.Data("getSelectedJobTitle");
+                                                                                                                                                    }))
+                                                                                                                                            )
+                                                                                                                                        </div>
+                                                                                                                                        <div class="col-md-1">
+                                                                                                                                            <a class="btn btn-primary btnSelect btnSelectJobTitle" href="javascript:;">select<i class="fa fa-long-arrow-right"></i></a>
+                                                                                                                                            <a class="btn btn-primary btnDeselect btnDeselectJobTitle" href="javascript:;">Deselect<i class="fa fa-long-arrow-left"></i></a>
+                                                                                                                                        </div>
+                                                                                                                                        <div class="col-md-5">
+                                                                                                                                            @(Html.Kendo().Grid(Model.ListJobTitleSelected).Name("gridSelectedJobTitle").HtmlAttributes(new { @class = "TargetJobTitle" })
+                                                                                                                                                        .Columns(columns =>
+                                                                                                                                                        {
+                                                                                                                                                            //columns.Bound(m => m.DescriptionENG).Title("Function Name").Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").ShowOperators(false)));
+                                                                                                                                                            columns.Bound(m => m.ID).Visible(false);
+                                                                                                                                                            columns.Bound(m => m.Code).Title("Code").Visible(false);
+                                                                                                                                                            columns.Bound(m => m.Name).Title("Name");
+
+
+                                                                                                                                                        })
+                                                                                                                                                        .Pageable(s => s.Refresh(true))
+                                                                                                                                                        .Filterable()
+                                                                                                                                                        .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                                                                                                                                                        .PersistSelection(true)
+                                                                                                                                                        .Sortable()
+                                                                                                                                                        //.Filterable(f => { f.Mode(GridFilterMode.Row); f.Extra(false); f.Operators(op => op.ForString(str => str.Clear().Contains("contains"))); })
+                                                                                                                                                        .DataSource(ds => ds.Ajax().Read(r =>
+                                                                                                                                                        {
+                                                                                                                                                            r.Action("ListSelectedJobTitle", "EmployeeFilter", new { ID = Model.ID, area = "SystemAdmin" });
+                                                                                                                                                            r.Data("getUnselectedJobTitle");
+                                                                                                                                                        }))
+                                                                                                                                            )
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                  );
+
+                                                                                  panelbar.Add().Text("Location").Expanded(false).Content(
+                                                                                                                                                                        @<div>
+                                                                                                                                                                            <div class="row">
+                                                                                                                                                                                <div class="col-md-5">
+                                                                                                                                                                                    @(Html.Kendo().Grid(Model.ListLocation).Name("gridLocation").HtmlAttributes(new { @class = "SourceLocation" })
+                                                                                                                                                                                        .Columns(columns =>
+                                                                                                                                                                                            {
+                                                                                                                                                                                                columns.Bound(m => m.ID).Visible(false);
+                                                                                                                                                                                                columns.Bound(m => m.Code).Visible(false);
+                                                                                                                                                                                                columns.Bound(m => m.Name).Title("Name");
+                                                                                                                                                                                            })
+                                                                                                                                                                                        .Pageable(s => s.Refresh(true))
+                                                                                                                                                                                            .Filterable()
+                                                                                                                                                                                            .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                                                                                                                                                                                            .PersistSelection(true)
+                                                                                                                                                                                            .Sortable()
+                                                                                                                                                                                            //.Filterable(f => { f.Mode(GridFilterMode.Row); f.Extra(false); f.Operators(op => op.ForString(str => str.Clear().Contains("contains"))); })
+                                                                                                                                                                                            .DataSource(ds => ds.Ajax().Read(r =>
+                                                                                                                                                                                            {
+                                                                                                                                                                                                r.Action("ListUnselectedLocation", "EmployeeFilter", new { ID = Model.ID, area = "SystemAdmin" });
+                                                                                                                                                                                                r.Data("getSelectedLocation");
+                                                                                                                                                                                            }))
+                                                                                                                                                                                    )
+                                                                                                                                                                                </div>
+                                                                                                                                                                                <div class="col-md-1">
+                                                                                                                                                                                    <a class="btn btn-primary btnSelect btnSelectLocation" href="javascript:;">select<i class="fa fa-long-arrow-right"></i></a>
+                                                                                                                                                                                    <a class="btn btn-primary btnDeselect btnDeselectLocation" href="javascript:;">Deselect<i class="fa fa-long-arrow-left"></i></a>
+                                                                                                                                                                                </div>
+                                                                                                                                                                                <div class="col-md-5">
+                                                                                                                                                                                    @(Html.Kendo().Grid(Model.ListLocationSelected).Name("gridSelectedLocation").HtmlAttributes(new { @class = "TargetLocation" })
+                                                                                                                                                                                                .Columns(columns =>
+                                                                                                                                                                                                {
+                                                                                                                                                                                                    //columns.Bound(m => m.DescriptionENG).Title("Function Name").Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").ShowOperators(false)));
+                                                                                                                                                                                                    columns.Bound(m => m.ID).Visible(false);
+                                                                                                                                                                                                    columns.Bound(m => m.Code).Title("Code").Visible(false);
+                                                                                                                                                                                                    columns.Bound(m => m.Name).Title("Name");
+
+
+                                                                                                                                                                                                })
+                                                                                                                                                                                                .Pageable(s => s.Refresh(true))
+                                                                                                                                                                                                .Filterable()
+                                                                                                                                                                                                .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                                                                                                                                                                                                .PersistSelection(true)
+                                                                                                                                                                                                .Sortable()
+                                                                                                                                                                                                //.Filterable(f => { f.Mode(GridFilterMode.Row); f.Extra(false); f.Operators(op => op.ForString(str => str.Clear().Contains("contains"))); })
+                                                                                                                                                                                                .DataSource(ds => ds.Ajax().Read(r =>
+                                                                                                                                                                                                {
+                                                                                                                                                                                                    r.Action("ListSelectedLocation", "EmployeeFilter", new { ID = Model.ID, area = "SystemAdmin" });
+                                                                                                                                                                                                    r.Data("getUnselectedLocation");
+                                                                                                                                                                                                }))
+                                                                                                                                                                                    )
+                                                                                                                                                                                </div>
+                                                                                                                                                                            </div>
+                                                                                                                                                                        </div>
+                                                                                                                          );
+
+                                                                                                                          panelbar.Add().Text("EmployeeStatus").Expanded(false).Content(
+                                                                                                                                                                                                                @<div>
+                                                                                                                                                                                                                    <div class="row">
+                                                                                                                                                                                                                        <div class="col-md-5">
+                                                                                                                                                                                                                            @(Html.Kendo().Grid(Model.ListEmployeeStatus).Name("gridEmployeeStatus").HtmlAttributes(new { @class = "SourceEmployeeStatus" })
+                                                                                                                                                                                                                                .Columns(columns =>
+                                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                                        columns.Bound(m => m.ID).Visible(false);
+                                                                                                                                                                                                                                        columns.Bound(m => m.Code).Visible(false);
+                                                                                                                                                                                                                                        columns.Bound(m => m.Name).Title("Name");
+                                                                                                                                                                                                                                    })
+                                                                                                                                                                                                                                .Pageable(s => s.Refresh(true))
+                                                                                                                                                                                                                                    .Filterable()
+                                                                                                                                                                                                                                    .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                                                                                                                                                                                                                                    .PersistSelection(true)
+                                                                                                                                                                                                                                    .Sortable()
+                                                                                                                                                                                                                                    //.Filterable(f => { f.Mode(GridFilterMode.Row); f.Extra(false); f.Operators(op => op.ForString(str => str.Clear().Contains("contains"))); })
+                                                                                                                                                                                                                                    .DataSource(ds => ds.Ajax().Read(r =>
+                                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                                        r.Action("ListUnselectedEmployeeStatus", "EmployeeFilter", new { ID = Model.ID, area = "SystemAdmin" });
+                                                                                                                                                                                                                                        r.Data("getSelectedEmployeeStatus");
+                                                                                                                                                                                                                                    }))
+                                                                                                                                                                                                                            )
+                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                        <div class="col-md-1">
+                                                                                                                                                                                                                            <a class="btn btn-primary btnSelect btnSelectEmployeeStatus" href="javascript:;">select<i class="fa fa-long-arrow-right"></i></a>
+                                                                                                                                                                                                                            <a class="btn btn-primary btnDeselect btnDeselectEmployeeStatus" href="javascript:;">Deselect<i class="fa fa-long-arrow-left"></i></a>
+                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                        <div class="col-md-5">
+                                                                                                                                                                                                                            @(Html.Kendo().Grid(Model.ListEmployeeStatusSelected).Name("gridSelectedEmployeeStatus").HtmlAttributes(new { @class = "TargetEmployeeStatus" })
+                                                                                                                                                                                                                                        .Columns(columns =>
+                                                                                                                                                                                                                                        {
+                                                                                                                                                                                                                                            //columns.Bound(m => m.DescriptionENG).Title("Function Name").Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").ShowOperators(false)));
+                                                                                                                                                                                                                                            columns.Bound(m => m.ID).Visible(false);
+                                                                                                                                                                                                                                            columns.Bound(m => m.Code).Title("Code").Visible(false);
+                                                                                                                                                                                                                                            columns.Bound(m => m.Name).Title("Name");
+
+
+                                                                                                                                                                                                                                        })
+                                                                                                                                                                                                                                        .Pageable(s => s.Refresh(true))
+                                                                                                                                                                                                                                        .Filterable()
+                                                                                                                                                                                                                                        .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                                                                                                                                                                                                                                        .PersistSelection(true)
+                                                                                                                                                                                                                                        .Sortable()
+                                                                                                                                                                                                                                        //.Filterable(f => { f.Mode(GridFilterMode.Row); f.Extra(false); f.Operators(op => op.ForString(str => str.Clear().Contains("contains"))); })
+                                                                                                                                                                                                                                        .DataSource(ds => ds.Ajax().Read(r =>
+                                                                                                                                                                                                                                        {
+                                                                                                                                                                                                                                            r.Action("ListSelectedEmployeeStatus", "EmployeeFilter", new { ID = Model.ID, area = "SystemAdmin" });
+                                                                                                                                                                                                                                            r.Data("getUnselectedEmployeeStatus");
+                                                                                                                                                                                                                                        }))
+                                                                                                                                                                                                                            )
+                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                </div>
+                                                                                                                                                                  );
+
+
+                                                                                                                                                                  panelbar.Add().Text("Filter Org").Expanded(true).Content(@<input name="test" value="test" />);
+                                                                                                        })
+            )
+        </div>
+        @*</div>*@  @*row baris 73*@
+    </div>
+</div>
+
+<div>
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addEditForm", name = "addEditForm", @class = "general-table-form" }))
+    {
+        @Html.Label("ini")
+        @Html.ListBoxFor(x => x.GradeNotSelected, new SelectList(Model.ListGrade, "ID", "Name"), new { Multiple = "multiple", Style = "display: none", @class = "source-selectedGrade" })
+        @Html.ListBoxFor(x => x.GradeSelected, new SelectList(Model.ListGradeSelected, "ID", "Name"), new { Multiple = "multiple", Style = "display: none", @class = "target-selectedGrade" })
+
+        @Html.ListBoxFor(x => x.LevelNotSelected, new SelectList(Model.ListLevel, "ID", "Name"), new { Multiple = "multiple", Style = "display: none", @class = "source-selectedLevel" })
+        @Html.ListBoxFor(x => x.LevelSelected, new SelectList(Model.ListLevelSelected, "ID", "Name"), new { Multiple = "multiple", Style = "display: none", @class = "target-selectedLevel" })
+
+        @Html.ListBoxFor(x => x.JobTitleNotSelected, new SelectList(Model.ListJobTitle, "ID", "Name"), new { Multiple = "multiple", Style = "display: none", @class = "source-selectedJobTitle" })
+        @Html.ListBoxFor(x => x.JobTitleSelected, new SelectList(Model.ListJobTitleSelected, "ID", "Name"), new { Multiple = "multiple", Style = "display: none", @class = "target-selectedJobTitle" })
+
+        @Html.ListBoxFor(x => x.LocationNotSelected, new SelectList(Model.ListLocation, "ID", "Name"), new { Multiple = "multiple", Style = "display: none", @class = "source-selectedLocation" })
+        @Html.ListBoxFor(x => x.LocationSelected, new SelectList(Model.ListLocationSelected, "ID", "Name"), new { Multiple = "multiple", Style = "display: none", @class = "target-selectedLocation" })
+
+        @*@Html.ListBoxFor(x => x.OrganizationUnitNotSelected, new SelectList(Model.ListOrganizationUnit, "ID", "Name"), new { Multiple = "multiple", Style = "display: none", @class = "source-selectedOrganizationUnit" })
+            @Html.ListBoxFor(x => x.OrganizationUnitSelected, new SelectList(Model.ListOrganizationUnitSelected, "ID", "Name"), new { Multiple = "multiple", Style = "display: none", @class = "target-selectedOrganizationUnit" })*@
+
+        @Html.ListBoxFor(x => x.EmployeeStatusNotSelected, new SelectList(Model.ListEmployeeStatus, "ID", "Name"), new { Multiple = "multiple", Style = "display: none", @class = "source-selectedEmployeeStatus" })
+        @Html.ListBoxFor(x => x.EmployeeStatusSelected, new SelectList(Model.ListEmployeeStatusSelected, "ID", "Name"), new { Multiple = "multiple", Style = "display: none", @class = "target-selectedEmployeeStatus" })
+
+        <div class="col-md-12">
+            <button type="submit" id="btnSave" name="btnSave" class="btn btn-primary">Save</button>
+            <button type="button" id="btnClose" name="btnClose" class="btn btn-primary">Close</button>
+        </div>
+    }
+</div>
+
+
+
+
+<script>
+    var createEdit = (function (createEdit) {
+        createEdit.createUrl = "@Url.Action("UpdateDetail")";
+        createEdit.editUrl = "@Url.Action("UpdateDetail")";
+        return createEdit;
+    })(createEdit || {});
+</script>
+<script src="~/js/modules/save-create-edit.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#GradeSelected option").each(function () {
+            $(this).attr("selected", true);
+        });
+    });
+</script>
+
+@*Grade*@
+<script>
+    function getSelectedGrade() {
+        var items = [];
+        try {
+            $('#GradeSelected option').each(function () {
+                items.push($(this).val());
+            });
+            return { selectedID: items };
+        } catch (e) {
+            return { selectedID: null };
+        }
+    }
+</script>
+<script>
+    function getUnselectedGrade() {
+        var items = [];
+        try {
+            $('#GradeNotSelected option').each(function () {
+                items.push($(this).val());
+            });
+            return { unselectedID: items };
+        } catch (e) {
+            return { unselectedID: null };
+        }
+    }
+</script>
+
+<script>
+    $(function () {
+        $(".btnSelectGrade").on("click", function (e) {
+            console.trace();
+            e.preventDefault();
+            var grid1 = $(".SourceGrade").data("kendoGrid");
+            var grid2 = $(".TargetGrade").data("kendoGrid");
+            var source = $(".source-selectedGrade");
+            var target = $(".target-selectedGrade");
+            moveTo(grid1, grid2, source, target, "select");
+            grid1.dataSource.read();
+            grid1.refresh();
+            grid2.dataSource.read();
+            grid2.refresh();
+        });
+
+        $(".btnDeselectGrade").on("click", function (e) {
+            e.preventDefault();
+            var grid1 = $(".SourceGrade").data("kendoGrid");
+            var grid2 = $(".TargetGrade").data("kendoGrid");
+            var source = $(".source-selectedGrade");
+            var target = $(".target-selectedGrade");
+            moveTo(grid2, grid1, source, target, "deselect");
+            grid1.dataSource.read();
+            grid1.refresh();
+            grid2.dataSource.read();
+            grid2.refresh();
+        });
+
+        function moveTo(from, to, source, target, status) {
+            var selected = from.select();
+            if (selected.length > 0) {
+                var items = [];
+                var fromDS = from.dataSource;
+                var toDS = to.dataSource;
+                $.each(selected, function (id, val) {
+                    items.push(from.dataItem(val));
+                });
+                $.each(items, function (id, val) {
+                    if (status == "select") {
+                        source.find('option[value=' + val["ID"] + ']').remove();
+                        target.append('<option value="' + val["ID"] + '" selected="selected">' + val["Name"] + '</option>');
+                    }
+                    else {
+                        target.find('option[value=' + val["ID"] + ']').remove();
+                        source.append('<option value="' + val["ID"] + '" selected="selected">' + val["Name"] + '</option>');
+                    }
+                    toDS.add(val);
+                    fromDS.remove(val);
+                });
+            }
+        }
+    });
+</script>
+@*Grade*@
+
+@*Level*@
+<script>
+    function getSelectedLevel() {
+        var items = [];
+        try {
+            $('#LevelSelected option').each(function () {
+                items.push($(this).val());
+            });
+            return { selectedID: items };
+        } catch (e) {
+            return { selectedID: null };
+        }
+    }
+</script>
+<script>
+    function getUnselectedLevel() {
+        var items = [];
+        try {
+            $('#LevelNotSelected option').each(function () {
+                items.push($(this).val());
+            });
+            return { unselectedID: items };
+        } catch (e) {
+            return { unselectedID: null };
+        }
+    }
+</script>
+<script>
+    $(function () {
+        $(".btnSelectLevel").on("click", function (e) {
+            console.trace();
+            e.preventDefault();
+            var grid1 = $(".SourceLevel").data("kendoGrid");
+            var grid2 = $(".TargetLevel").data("kendoGrid");
+            var source = $(".source-selectedLevel");
+            var target = $(".target-selectedLevel");
+            moveTo(grid1, grid2, source, target, "select");
+            grid1.dataSource.read();
+            grid1.refresh();
+            grid2.dataSource.read();
+            grid2.refresh();
+        });
+
+        $(".btnDeselectLevel").on("click", function (e) {
+            e.preventDefault();
+            var grid1 = $(".SourceLevel").data("kendoGrid");
+            var grid2 = $(".TargetLevel").data("kendoGrid");
+            var source = $(".source-selectedLevel");
+            var target = $(".target-selectedLevel");
+            moveTo(grid2, grid1, source, target, "deselect");
+            grid1.dataSource.read();
+            grid1.refresh();
+            grid2.dataSource.read();
+            grid2.refresh();
+        });
+
+        function moveTo(from, to, source, target, status) {
+            var selected = from.select();
+            if (selected.length > 0) {
+                var items = [];
+                var fromDS = from.dataSource;
+                var toDS = to.dataSource;
+                $.each(selected, function (id, val) {
+                    items.push(from.dataItem(val));
+                });
+                $.each(items, function (id, val) {
+                    if (status == "select") {
+                        source.find('option[value=' + val["ID"] + ']').remove();
+                        target.append('<option value="' + val["ID"] + '" selected="selected">' + val["Name"] + '</option>');
+                    }
+                    else {
+                        target.find('option[value=' + val["ID"] + ']').remove();
+                        source.append('<option value="' + val["ID"] + '" selected="selected">' + val["Name"] + '</option>');
+                    }
+                    toDS.add(val);
+                    fromDS.remove(val);
+                });
+            }
+        }
+    });
+</script>
+
+@*JobTitle*@
+<script>
+    function getSelectedJobTitle() {
+        var items = [];
+        try {
+            $('#JobTitleSelected option').each(function () {
+                items.push($(this).val());
+            });
+            return { selectedID: items };
+        } catch (e) {
+            return { selectedID: null };
+        }
+    }
+</script>
+<script>
+    function getUnselectedJobTitle() {
+        var items = [];
+        try {
+            $('#JobTitleNotSelected option').each(function () {
+                items.push($(this).val());
+            });
+            return { unselectedID: items };
+        } catch (e) {
+            return { unselectedID: null };
+        }
+    }
+</script>
+<script>
+    $(function () {
+        $(".btnSelectJobTitle").on("click", function (e) {
+            console.trace();
+            e.preventDefault();
+            var grid1 = $(".SourceJobTitle").data("kendoGrid");
+            var grid2 = $(".TargetJobTitle").data("kendoGrid");
+            var source = $(".source-selectedJobTitle");
+            var target = $(".target-selectedJobTitle");
+            moveTo(grid1, grid2, source, target, "select");
+            grid1.dataSource.read();
+            grid1.refresh();
+            grid2.dataSource.read();
+            grid2.refresh();
+        });
+
+        $(".btnDeselectJobTitle").on("click", function (e) {
+            e.preventDefault();
+            var grid1 = $(".SourceJobTitle").data("kendoGrid");
+            var grid2 = $(".TargetJobTitle").data("kendoGrid");
+            var source = $(".source-selectedJobTitle");
+            var target = $(".target-selectedJobTitle");
+            moveTo(grid2, grid1, source, target, "deselect");
+            grid1.dataSource.read();
+            grid1.refresh();
+            grid2.dataSource.read();
+            grid2.refresh();
+        });
+
+        function moveTo(from, to, source, target, status) {
+            var selected = from.select();
+            if (selected.length > 0) {
+                var items = [];
+                var fromDS = from.dataSource;
+                var toDS = to.dataSource;
+                $.each(selected, function (id, val) {
+                    items.push(from.dataItem(val));
+                });
+                $.each(items, function (id, val) {
+                    if (status == "select") {
+                        source.find('option[value=' + val["ID"] + ']').remove();
+                        target.append('<option value="' + val["ID"] + '" selected="selected">' + val["Name"] + '</option>');
+                    }
+                    else {
+                        target.find('option[value=' + val["ID"] + ']').remove();
+                        source.append('<option value="' + val["ID"] + '" selected="selected">' + val["Name"] + '</option>');
+                    }
+                    toDS.add(val);
+                    fromDS.remove(val);
+                });
+            }
+        }
+    });
+</script>
+
+@*Location*@
+<script>
+    function getSelectedLocation() {
+        var items = [];
+        try {
+            $('#LocationSelected option').each(function () {
+                items.push($(this).val());
+            });
+            return { selectedID: items };
+        } catch (e) {
+            return { selectedID: null };
+        }
+    }
+</script>
+<script>
+    function getUnselectedLocation() {
+        var items = [];
+        try {
+            $('#LocationNotSelected option').each(function () {
+                items.push($(this).val());
+            });
+            return { unselectedID: items };
+        } catch (e) {
+            return { unselectedID: null };
+        }
+    }
+</script>
+<script>
+    $(function () {
+        $(".btnSelectLocation").on("click", function (e) {
+            console.trace();
+            e.preventDefault();
+            var grid1 = $(".SourceLocation").data("kendoGrid");
+            var grid2 = $(".TargetLocation").data("kendoGrid");
+            var source = $(".source-selectedLocation");
+            var target = $(".target-selectedLocation");
+            moveTo(grid1, grid2, source, target, "select");
+            grid1.dataSource.read();
+            grid1.refresh();
+            grid2.dataSource.read();
+            grid2.refresh();
+        });
+
+        $(".btnDeselectLocation").on("click", function (e) {
+            e.preventDefault();
+            var grid1 = $(".SourceLocation").data("kendoGrid");
+            var grid2 = $(".TargetLocation").data("kendoGrid");
+            var source = $(".source-selectedLocation");
+            var target = $(".target-selectedLocation");
+            moveTo(grid2, grid1, source, target, "deselect");
+            grid1.dataSource.read();
+            grid1.refresh();
+            grid2.dataSource.read();
+            grid2.refresh();
+        });
+
+        function moveTo(from, to, source, target, status) {
+            var selected = from.select();
+            if (selected.length > 0) {
+                var items = [];
+                var fromDS = from.dataSource;
+                var toDS = to.dataSource;
+                $.each(selected, function (id, val) {
+                    items.push(from.dataItem(val));
+                });
+                $.each(items, function (id, val) {
+                    if (status == "select") {
+                        source.find('option[value=' + val["ID"] + ']').remove();
+                        target.append('<option value="' + val["ID"] + '" selected="selected">' + val["Name"] + '</option>');
+                    }
+                    else {
+                        target.find('option[value=' + val["ID"] + ']').remove();
+                        source.append('<option value="' + val["ID"] + '" selected="selected">' + val["Name"] + '</option>');
+                    }
+                    toDS.add(val);
+                    fromDS.remove(val);
+                });
+            }
+        }
+    });
+</script>
+
+@*OrganizationUnit*@
+<script>
+    function getSelectedOrganizationUnit() {
+        var items = [];
+        try {
+            $('#OrganizationUnitSelected option').each(function () {
+                items.push($(this).val());
+            });
+            return { selectedID: items };
+        } catch (e) {
+            return { selectedID: null };
+        }
+    }
+</script>
+<script>
+    function getUnselectedOrganizationUnit() {
+        var items = [];
+        try {
+            $('#OrganizationUnitNotSelected option').each(function () {
+                items.push($(this).val());
+            });
+            return { unselectedID: items };
+        } catch (e) {
+            return { unselectedID: null };
+        }
+    }
+</script>
+<script>
+    $(function () {
+        $(".btnSelectOrganizationUnit").on("click", function (e) {
+            console.trace();
+            e.preventDefault();
+            var grid1 = $(".SourceOrganizationUnit").data("kendoGrid");
+            var grid2 = $(".TargetOrganizationUnit").data("kendoGrid");
+            var source = $(".source-selectedOrganizationUnit");
+            var target = $(".target-selectedOrganizationUnit");
+            moveTo(grid1, grid2, source, target, "select");
+            grid1.dataSource.read();
+            grid1.refresh();
+            grid2.dataSource.read();
+            grid2.refresh();
+        });
+
+        $(".btnDeselectOrganizationUnit").on("click", function (e) {
+            e.preventDefault();
+            var grid1 = $(".SourceOrganizationUnit").data("kendoGrid");
+            var grid2 = $(".TargetOrganizationUnit").data("kendoGrid");
+            var source = $(".source-selectedOrganizationUnit");
+            var target = $(".target-selectedOrganizationUnit");
+            moveTo(grid2, grid1, source, target, "deselect");
+            grid1.dataSource.read();
+            grid1.refresh();
+            grid2.dataSource.read();
+            grid2.refresh();
+        });
+
+        function moveTo(from, to, source, target, status) {
+            var selected = from.select();
+            if (selected.length > 0) {
+                var items = [];
+                var fromDS = from.dataSource;
+                var toDS = to.dataSource;
+                $.each(selected, function (id, val) {
+                    items.push(from.dataItem(val));
+                });
+                $.each(items, function (id, val) {
+                    if (status == "select") {
+                        source.find('option[value=' + val["ID"] + ']').remove();
+                        target.append('<option value="' + val["ID"] + '" selected="selected">' + val["Name"] + '</option>');
+                    }
+                    else {
+                        target.find('option[value=' + val["ID"] + ']').remove();
+                        source.append('<option value="' + val["ID"] + '" selected="selected">' + val["Name"] + '</option>');
+                    }
+                    toDS.add(val);
+                    fromDS.remove(val);
+                });
+            }
+        }
+    });
+</script>
+
+@*EmployeeStatus*@
+<script>
+    function getSelectedEmployeeStatus() {
+        var items = [];
+        try {
+            $('#EmployeeStatusSelected option').each(function () {
+                items.push($(this).val());
+            });
+            return { selectedID: items };
+        } catch (e) {
+            return { selectedID: null };
+        }
+    }
+</script>
+<script>
+    function getUnselectedEmployeeStatus() {
+        var items = [];
+        try {
+            $('#EmployeeStatusNotSelected option').each(function () {
+                items.push($(this).val());
+            });
+            return { unselectedID: items };
+        } catch (e) {
+            return { unselectedID: null };
+        }
+    }
+</script>
+<script>
+    $(function () {
+        $(".btnSelectEmployeeStatus").on("click", function (e) {
+            console.trace();
+            e.preventDefault();
+            var grid1 = $(".SourceEmployeeStatus").data("kendoGrid");
+            var grid2 = $(".TargetEmployeeStatus").data("kendoGrid");
+            var source = $(".source-selectedEmployeeStatus");
+            var target = $(".target-selectedEmployeeStatus");
+            moveTo(grid1, grid2, source, target, "select");
+            grid1.dataSource.read();
+            grid1.refresh();
+            grid2.dataSource.read();
+            grid2.refresh();
+        });
+
+        $(".btnDeselectEmployeeStatus").on("click", function (e) {
+            e.preventDefault();
+            var grid1 = $(".SourceEmployeeStatus").data("kendoGrid");
+            var grid2 = $(".TargetEmployeeStatus").data("kendoGrid");
+            var source = $(".source-selectedEmployeeStatus");
+            var target = $(".target-selectedEmployeeStatus");
+            moveTo(grid2, grid1, source, target, "deselect");
+            grid1.dataSource.read();
+            grid1.refresh();
+            grid2.dataSource.read();
+            grid2.refresh();
+        });
+
+        function moveTo(from, to, source, target, status) {
+            var selected = from.select();
+            if (selected.length > 0) {
+                var items = [];
+                var fromDS = from.dataSource;
+                var toDS = to.dataSource;
+                $.each(selected, function (id, val) {
+                    items.push(from.dataItem(val));
+                });
+                $.each(items, function (id, val) {
+                    if (status == "select") {
+                        source.find('option[value=' + val["ID"] + ']').remove();
+                        target.append('<option value="' + val["ID"] + '" selected="selected">' + val["Name"] + '</option>');
+                    }
+                    else {
+                        target.find('option[value=' + val["ID"] + ']').remove();
+                        source.append('<option value="' + val["ID"] + '" selected="selected">' + val["Name"] + '</option>');
+                    }
+                    toDS.add(val);
+                    fromDS.remove(val);
+                });
+            }
+        }
+    });
+</script>

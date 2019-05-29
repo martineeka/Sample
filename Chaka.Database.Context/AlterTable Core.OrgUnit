@@ -1,0 +1,3 @@
+﻿alter table core.orgunit drop constraint FK_OrgUnit_Location
+ALTER TABLE core.orgunit
+DROP column LocationID;

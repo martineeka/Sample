@@ -1,0 +1,140 @@
+﻿@{
+    ViewData["Title"] = "Org Unit Hierarchy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="head-section content-padding">
+    <h2 class="page-title">Organization Report Hierarchy</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Hierarchy</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Organization Report Hierarchy</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+                <p align="right">
+                    <button type="submit" id="btnExport" name="btnExport" class="btn btn-primary export-pdf">Export PDF</button>
+                    <button type="submit" id="btnPrint" name="btnPrint" class="btn btn-primary print-diagram">Print</button>
+                </p>
+                <div id="diagram">
+                </div>
+                <p align="right">
+                    <input type="button" id="btnBack" value="BACK" name="btnBack" class="btn btn-primary float:right;" onclick="window.location='@Url.Action("Index", "OrganizationReport" )'">
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(".print-diagram").click(function () {
+        var divToPrint = document.getElementById('diagram');
+        var newWin = window.open('', 'Print-Window');
+        newWin.document.open();
+        newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+        newWin.document.close();
+        setTimeout(function () { newWin.close(); }, 10);
+    });
+
+
+    $(".export-pdf").click(function () {
+        var diagram = $("#diagram").getKendoDiagram();
+        diagram.exportPDF({ paperSize: "auto", margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" } }).done(function (data) {
+            kendo.saveAs({
+                dataURI: data,
+                fileName: "Organization - Report Hierarchy.pdf"
+            });
+        });
+    });
+
+
+    var data = @Html.Raw(Json.Serialize(ViewData["reOrgChart"]));
+    function visualTemplate(options) {
+            var dataviz = kendo.dataviz;
+            var g = new dataviz.diagram.Group();
+            var dataItem = options.dataItem;
+
+            g.append(new dataviz.diagram.Rectangle({
+                width:250,
+                height: 75,
+                stroke: {
+                    width: 0
+                },
+                fill: {
+                    gradient: {
+                        type: "linear",
+                        stops: [{
+                            color: '#2196f3',
+                            offset: 0,
+                            opacity: 0.5
+                        }, {
+                            color: '#2196f3',
+                            offset: 1,
+                            opacity: 1
+                        }]
+                    }
+                }
+            }));
+
+            g.append(new dataviz.diagram.TextBlock({
+                text: dataItem.Code,
+                x: 30,
+                y: 10,
+                fill: "#fff"
+            }));
+
+            g.append(new dataviz.diagram.TextBlock({
+                text: dataItem.Name,
+                x: 30,
+                y: 30,
+                fill: "#fff"
+            }));
+            return g;
+        }
+
+    function createDiagram() {
+
+            $("#diagram").kendoDiagram({
+                dataSource: new kendo.data.HierarchicalDataSource({
+                    data: data,
+                    schema: {
+                        model: {
+                            children: "items"
+                        }
+                    }
+                }),
+                layout: {
+                    type: "layered"
+                },
+                shapeDefaults: {
+                    visual: visualTemplate
+                },
+                connectionDefaults: {
+                    stroke: {
+                        color: "#979797",
+                        width: 2
+                    }
+                },
+                schema: {
+                  model: {
+                    children: "items"
+                  }
+                }
+             });
+            var diagram = $("#diagram").getKendoDiagram();
+            diagram.bringIntoView(diagram.shapes);
+        }
+    $(document).ready(createDiagram);
+</script>
+
+
+

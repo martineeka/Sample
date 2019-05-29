@@ -1,0 +1,85 @@
+﻿@model Chaka.ViewModels.SystemAdmin.EmployeeInfoRestrictionGroup.CreateEditViewModel
+
+@using Kendo.Mvc.UI
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addEditForm", name = "addEditForm" }))
+{
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m=>m.Code)
+    @Html.HiddenFor(m=>m.Name)
+    @Html.HiddenFor(m=>m.Description)
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Code)</div>
+            <div class="col-md-8">
+                @(Model.Code)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Name)</div>
+            <div class="col-md-8">
+                @(Model.Name)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Description)</div>
+            <div class="col-md-8">
+                @(Model.Description)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-6">Personal Information</div>
+        </div>
+        <table>
+            <tr>
+                <td><input type="checkbox" name="BiodataAuthority" @(Model.BiodataAuthority ? "checked" : "") value="true">&nbsp;Biodata Information</td>
+                <td><input type="checkbox" name="SkillAuthority" @(Model.SkillAuthority ? "checked" : "") value="true">&nbsp;Skill Information</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" name="PaymentAuthority" @(Model.PaymentAuthority ? "checked" : "") value="true">&nbsp;Payment Information</td>
+                <td><input type="checkbox" name="FamilyAuthority" @(Model.FamilyAuthority ? "checked" : "") value="true">&nbsp;Family Information</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" name="PayrollAuthority" @(Model.PayrollAuthority ? "checked" : "") value="true">&nbsp;Payroll Information</td>
+                <td><input type="checkbox" name="EducationAuthority" @(Model.EducationAuthority ? "checked" : "") value="true">&nbsp;Education Information</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" name="CustomAuthority" @(Model.CustomAuthority ? "checked" : "") value="true">&nbsp;Custom Information</td>
+            </tr>
+        </table>
+
+        <div class="form-group">
+            <div class="col-md-6">Employee Information</div>
+        </div>
+        <table>
+            <tr>
+                <td><input type="checkbox" name="GradeAuthority" @(Model.GradeAuthority ? "checked" : "") value="true">&nbsp;Grade Information</td>
+                <td><input type="checkbox" name="StatusAuthority" @(Model.StatusAuthority ? "checked" : "") value="true">&nbsp;Status Information</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" name="JobTitleAuthority" @(Model.JobTitleAuthority ? "checked" : "") value="true">&nbsp;Job Title Information</td>
+                <td><input type="checkbox" name="SalaryAuthority" @(Model.SalaryAuthority ? "checked" : "") value="true">&nbsp;Salary Information</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" name="OrgUnitAuthority" @(Model.OrgUnitAuthority ? "checked" : "") value="true">&nbsp;Organization Unit Information</td>
+                <td><input type="checkbox" name="LocationAuthority" @(Model.LocationAuthority ? "checked" : "") value="true">&nbsp;Location Information</td>
+            </tr>
+        </table>
+
+        <div class="form-group">
+            <div class="col-md-2"></div>
+            <div class="col-md-7">
+                <button type="submit" id="btnSave" name="btnSave" class="btn btn-primary">Save</button>
+                <button type="button" id="btnClose" name="btnClose" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+
+    </div>
+}
+
+<script>
+    $(function () {
+        $("#btnClose").click(popup.closeClick);
+        $("#btnSave").click(popup.saveClick);
+    });
+</script>

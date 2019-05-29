@@ -1,0 +1,83 @@
+﻿@model Chaka.ViewModels.Organization.OrgUnit.CreateEditJobTitleViewModel
+
+    <script>
+        function filterData() {
+            return {
+                headerID: $("#OrganizationID").val()
+            };
+        }
+        function gridDataBoundBefore(e) {
+            var grid = $("#grid").data("kendoGrid");
+            var gridData = grid.dataSource.view();
+            if (gridData.length > 0) {
+                $("#btnSubmitHeader").prop('disabled', false);
+            } else {
+                $("#btnSubmitHeader").prop('disabled', true);
+            }
+            gridDataBound(e);
+        }
+    </script>
+
+@using Kendo.Mvc.UI
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addEditFormDetail", name = "addEditFormDetail" }))
+{
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.OrganizationID)
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.JobTitleID)</div>
+            <div class="col-md-8">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+
+                @(Html.Kendo().DropDownListFor(x => x.JobTitleID)
+                          .HtmlAttributes(new { style = "width:390px", @class = "form-control" })
+                          .OptionLabel("Select Job Title...")
+                          .DataTextField("Text")
+                          .DataValueField("Value").Filter(FilterType.Contains)
+                          .DataSource(source =>
+                          {
+                                source.Read(read =>
+                                {
+                                    read.Action("GetDropDownJobTitle", "OrganizationUnit");
+                                });
+                          })
+                )
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.ValidFrom) </div>
+            <div class="col-md-8">
+                <i class="required-field fa fa-asterisk"></i>
+                @Html.Kendo().DatePickerFor(m => m.ValidFrom).Max(Model.ValidTo.HasValue ? Model.ValidTo.Value : DateTime.MaxValue).HtmlAttributes(new { type = "text", placeholder = "Select date" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.ValidTo) </div>
+            <div class="col-md-7">
+                <i class="required-field"></i>
+                @Html.Kendo().DatePickerFor(m => m.ValidTo).Min(Model.ValidFrom.Value).HtmlAttributes(new { type = "text", placeholder = "Select date" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2"></div>
+            <div class="col-md-7">
+                <button type="submit" id="btnSaveDetail" name="btnSaveDetail" class="btn btn-primary">Save</button>
+                <button type="button" id="btnCloseDetail" name="btnCloseDetail" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $("#btnCloseDetail").click(popup.closeClickDetail);
+        $("#btnSaveDetail").click(popup.saveClickDetail);
+    });
+
+     $(function () {
+        $("span.clearDateTimePickerPopUp").click(function () { datePicker_clearValue(this) });
+    });
+     
+</script>

@@ -1,0 +1,151 @@
+﻿@{
+    ViewData["Title"] = "Job Title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+
+<div class="head-section content-padding">
+    <h2 class="page-title">Job Title</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Organization</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Job Title</li>
+        </ol>
+    </nav>
+</div>
+
+<style type="text/css">
+    .custombtn{
+        margin-right : 5px;
+        margin-bottom : 5px
+    }
+</style>
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+                @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "general-table-form" }))
+                {
+                    @Html.ListBox("list-all-item", new List<SelectListItem>())
+                    @Html.ListBox("list-check", new List<SelectListItem>())
+
+                <div class="btn-group">
+                    <a href="javascript:;" class="btn btn-success custombtn" id="btnAddNew" style="font-size:12px;"><i class="fa fa-plus"></i> Add New</a>
+                    <a href="@Url.Action("CreateNewPage","JobTitle")" class="btn btn-success custombtn" style="font-size:12px;"><i class="fa fa-plus"></i> Add New Page</a>
+                    <button type="submit" class="btn btn-danger custombtn" id="btnDelete" name="btnDelete"><i class="fa fa-minus"></i> Delete</button>
+                </div>
+                    @(Html.Kendo().Grid<Chaka.ViewModels.Organization.JobTitle.ListJobTitleViewModel>
+                           ()
+                           .Name("grid")
+                           .Columns(col =>
+                           {
+                               col.Bound("").ClientHeaderTemplate(@"<input type='checkbox' id='chkAll' onclick='checkAll()'/>")
+                                   .ClientTemplate(@"<input type='checkbox' class='Check' name='chkDelete' value='#=ID#' data-id='#=ID#' />")
+                                   .Width(50).HtmlAttributes(new { Class = "check-box-column" });
+                               col.Bound("").ClientTemplate("<a data-id='#=ID#' href='javascript:;' class='btn btn-primary  editRow'>Edit</a>").Width(100).Title("").Filterable(false);
+                               col.Bound("").ClientTemplate(@"<a data-id='#=ID#' href='" + Url.Action("IndexDescription", new { JobTitleID = "#=ID#" }) + "' class='btn btn-info'>Description</a>")
+                                   .Width(140).Title("").HtmlAttributes(new { Class = "button-column" });
+                               col.Bound("").ClientTemplate(@"<a data-id='#=ID#' href='" + Url.Action("IndexSfesification", new { JobTitleID = "#=ID#" }) + "' class='btn btn-info'>Specification</a>")
+                                   .Width(140).Title("").HtmlAttributes(new { Class = "button-column" });
+                               col.Bound(p => p.Code);
+                               col.Bound(p => p.Name);
+                               col.Bound(p => p.JobStatus);
+                               col.Bound(p => p.Description);
+                               col.Bound(p => p.JobLevel);
+                               col.Bound(p => p.JobLevelCategory);
+                           }).PersistSelection()
+                             .Pageable()
+                             .Sortable()
+                             .Filterable(filter =>
+                             {
+                                 filter.Extra(false);
+                                 filter.Operators(op =>
+                                 {
+                                     op.ForString(str => str.Clear());
+                                     op.ForString(str =>
+                                     {
+                                         str.Clear().Contains("Contains");
+                                     });
+                                 });
+                             })
+                             .DataSource(dataSource => dataSource
+                             .Ajax()
+                             .Read(read => read.Action("List", "JobTitle", new { area = "Organization" }))))
+                }
+            </div>
+        </div>
+        <div id="addEditWindow"></div>
+    </div>
+</div>
+
+<script>
+    var popup = (function (popup) {
+        popup.width = 600;
+        popup.height = 900;
+        popup.createUrl = "@Url.Action("Create")";
+        popup.editUrl = "@Url.Action("Edit")";
+        popup.deleteUrl = "@Url.Action("Delete")";
+        popup.createTitle = "Add Job Title";
+        popup.editTitle = "Edit Job Title";
+        return popup;
+    })(popup || {});
+</script>
+<script src="~/js/modules/pop-up.js"></script>
+
+<script>
+
+    function getCategory()
+    {
+        var selected_val = $('#JobLevelID').val();
+
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("GetLevelCategory", "JobTitle")",
+            data: { levelID: selected_val },
+            success: function (result)
+            {
+                $("#JobLevelCategoryID").val(result.Value)
+                $("#JobLevelCategory").val(result.Text)
+            },
+            error: function (err)
+            {
+                swal({
+                    title: "Error",
+                    text: err.statusText,
+                    type: "error",
+                    html: true
+                });
+            }
+        });
+    }
+
+    function startChange()
+    {
+        //var endPicker = $("#LastEff").data("kendoDatePicker"),
+        //    startDate = this.value();
+        var endPicker = $("#LastEff").data("datepicker"),
+            startDate = this.value();
+
+        if (startDate)
+        {
+            startDate = new Date(startDate);
+            startDate.setDate(startDate.getDate());
+            endPicker.min(startDate);
+        }
+    }
+
+    function endChange()
+    {
+        //var startPicker = $("#BeginEff").data("kendoDatePicker"),
+        //    endDate = this.value();
+        var startPicker = $("#BeginEff").data("datepicker"),
+            endDate = this.value();
+
+        if (endDate)
+        {
+            endDate = new Date(endDate);
+            endDate.setDate(endDate.getDate());
+            startPicker.max(endDate);
+        }
+    }
+</script>

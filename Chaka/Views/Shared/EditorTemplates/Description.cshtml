@@ -1,0 +1,11 @@
+﻿@model String
+
+<style>
+    #the-text-area {
+        resize: none;
+        width: 99%;
+        padding: 6px 0;
+        text-indent: .8em;
+    }
+</style>
+@Html.TextAreaFor(m => m, new { @id = "the-text-area", @class = "form-control" })

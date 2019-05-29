@@ -1,0 +1,26 @@
+﻿@using Kendo.Mvc.UI
+@{
+    ViewData["Title"] = "Level";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box">
+    <h4>Upload 1</h4>
+</div>
+
+<div>
+    <div class="demo-section k-content">
+        @(Html.Kendo().Upload()
+            .Name("files")
+            .Async(a => a
+                .Save("Save", "Hidayat")
+                .AutoUpload(false)
+            )
+        )
+    </div>
+</div>
+
+<a class="k-button k-primary" href='@Url.Action("Download", new { Path = "Image", File = "img.png"})'>Download</a>
+<br />
+<a class="k-button k-danger" href='@Url.Action("Remove", new { Path = "Image", File = "DDUR0L_tes.png"})'>Remove</a>
+

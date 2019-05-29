@@ -1,0 +1,370 @@
+﻿@model Chaka.ViewModels.Organization.OrgUnit.CreateEditViewModel
+
+<script type="text/javascript">
+    function filterParentUnit() {
+        return {
+            id: $("#ID").val(),
+            categoryTypeID: $("#OrganizationUnitCategoryID").val(),
+            text: $("#ParentID-list").find("input[role='listbox']").val()
+        };
+    }
+</script>
+
+@using Kendo.Mvc.UI
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addEditForm", name = "addEditForm" }))
+{
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.LegalEntityInformationID)
+    @Html.HiddenFor(m => m.SuperiorID)
+    @Html.HiddenFor(m => m.ParentID)
+
+
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Code) </div>
+            <div class="col-md-8">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                <input type="text" name="Code" class="form-control" value="@(Model.Code)" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Name) </div>
+            <div class="col-md-8">
+                <input type="text" name="Name" class="form-control" value="@(Model.Name)" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2">@Html.LabelFor(m => m.SuperiorName)</label>
+            <div class="col-md-8">
+                <i class="required-field fa fa-asterisk IsSpecificEmployee_validation"></i>
+                <div class="input-group">
+                    <input type="hidden" id="SuperiorID" name="FollowUpBy" class="parameters" value="@(Model.SuperiorID)" />
+
+                    @Html.Kendo().TextBoxFor(x => x.SuperiorName).HtmlAttributes(new { @class = "form-control hover-to-readonly" })
+                    @Html.Kendo().TextBoxFor(x => x.SuperiorCode).HtmlAttributes(new { @class = "form-control hover-to-readonly" })
+
+                    <div class="input-group-addon">
+                        <a id="btnSearch" class="k-icon k-i-search search-icon-fix" href="#"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        @*<div class="form-group">
+                <div class="col-md-2">@Html.LabelFor(m => m.Description)</div>
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Description, "Description")
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.CostCenterID)</div>
+            <div class="col-md-8">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                @(Html.Kendo().DropDownListFor(x => x.CostCenterID)
+                          .HtmlAttributes(new { style = "width:390px", @class = "form-control" })
+                          .OptionLabel("Select Cost Center...")
+                          .DataTextField("Text")
+                          .DataValueField("Value").Filter(FilterType.Contains)
+                          .DataSource(source =>
+                          {
+                                source.Read(read =>
+                                {
+                                    read.Action("GetCostCenter", "OrganizationUnit");
+                                });
+                          })
+                )
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.OrganizationlevelID)</div>
+            <div class="col-md-8">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+
+                @(Html.Kendo().DropDownListFor(x => x.OrganizationlevelID)
+                          .HtmlAttributes(new { style = "width:390px", @class = "form-control" })
+                          .OptionLabel("Select Job Level...")
+                          .DataTextField("Text")
+                          .DataValueField("Value").Filter(FilterType.Contains)
+                          .DataSource(source =>
+                          {
+                                source.Read(read =>
+                                {
+                                    read.Action("GetOrganizationUnitLevel", "OrganizationUnit");
+                                });
+                          })
+                )
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.BeginEff) </div>
+            <div class="col-md-8">
+                <i class="required-field fa fa-asterisk"></i>
+                @Html.Kendo().DatePickerFor(m => m.BeginEff).Max(Model.LastEff.HasValue ? Model.LastEff.Value : DateTime.MaxValue).HtmlAttributes(new { type = "text", placeholder = "Select date" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.LastEff) </div>
+            <div class="col-md-7">
+                <i class="required-field"></i>
+                @Html.Kendo().DatePickerFor(m => m.LastEff).Min(Model.BeginEff.Value).HtmlAttributes(new { type = "text", placeholder = "Select date" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2">@Html.LabelFor(m => m.ParentName)</label>
+            <div class="col-md-8">
+                <i class="required-field fa fa-asterisk IsSpecificEmployee_validation"></i>
+                <div class="input-group">
+                    <input type="hidden" id="ParentID" name="FollowUpBy" class="parameters" value="@(Model.ParentID)" />
+                    @Html.Kendo().TextBoxFor(x => x.ParentName).HtmlAttributes(new { @class = "form-control hover-to-readonly" })
+                    <div class="input-group-addon">
+                        <a id="btnSearch1" class="k-icon k-i-search search-icon-fix" href="#"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.CategoryID)</div>
+            <div class="col-md-8">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+
+                @(Html.Kendo().DropDownListFor(x => x.CategoryID)
+                          .HtmlAttributes(new { style = "width:390px", @class = "form-control" })
+                          .OptionLabel("Select Category...")
+                          .DataTextField("Text")
+                          .DataValueField("Value").Filter(FilterType.Contains)
+                          .DataSource(source =>
+                          {
+                                source.Read(read =>
+                                {
+                                    read.Action("GetOrganizationUnitCategory", "OrganizationUnit");
+                                });
+                          })
+                )
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2 ">
+                @Html.LabelFor(m => m.IsLegalEntity)
+            </div>
+            <div class="col-md-8">
+                @Html.Kendo().CheckBox().Name("IsLegalEntityDummy")
+                @Html.HiddenFor(m => m.IsLegalEntity)
+            </div>
+        </div>
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header">
+                    <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                        List Job Title
+                    </a>
+                </div>
+                <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                    <div class="card-body">
+
+                        <div class="btn-group">
+                            <a data-id="@Model.ID" href="javascript:;" class="btn btn-primary" id="btnAddNewDetail" style="font-size:12px;"><i class="fa fa-plus"></i> Add New</a>
+                            <button type="submit" class="btn btn-primary" id="btnDelete" name="btnDelete"><i class="fa fa-minus"></i> Delete</button>
+                        </div>
+                        @(Html.Kendo().Grid(Model.JobTitleList).Name("grids").EnableCustomBinding(true).Columns(
+                                    col =>
+                                    {
+                                         col.Bound("").ClientHeaderTemplate(@"<input type='checkbox' id='chkAll' onclick='checkAll()'/>")
+                                            .ClientTemplate(@"<input type='checkbox' class='Check' name='chkDelete' value='#=ID#' data-id='#=ID#' />")
+                                            .Width(50).HtmlAttributes(new { Class = "check-box-column" });
+                                        col.Bound("").ClientTemplate("<a data-id='#=ID#' href='javascript:;' class='btn btn-primary  editRowDetail'>Edit</a>").Width(100).Title("").Filterable(false);
+
+                                        col.Bound(m => m.Name).Width(150).Title("Job Title");
+
+                                        col.Bound(m => m.ValidFrom).Width(120).Title("Valid From").Format("{0:dd MMMM yyyy}");
+
+                                        col.Bound(m => m.ValidTo).Width(120).Title("Valid To").Format("{0:dd MMMM yyyy}");
+
+                                    })
+                        .PersistSelection()
+                        .Pageable()
+                        .Sortable()
+                        .Filterable()
+                        .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Read(read => read.Action("ListJobTitle", "OrganizationUnit", new { area = "Organization"}))
+                        )
+                        )
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+                        List Location
+
+                    </a>
+                </div>
+                <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, s
+                        ed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                        nisi ut aliquip ex ea commodo consequat.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3"></div>
+            <div class="col-md-7">
+                <button type="submit" id="btnSave" name="btnSave" class="btn btn-primary">Save</button>
+                <button type="button" id="btnClose" name="btnClose" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+
+}
+<div id="addEditWindow"></div>
+<div id="browseSuperior"></div>
+<div id="browseOrgUnit"></div>
+<script type="text/javascript">
+    var popup = (function (popup) {
+        popup.width = 600;
+        popup.createDetailUrl = "@Url.Action("CreateJobTitle")";
+        popup.editDetailUrl = "@Url.Action("EditJobTitle")";
+        popup.deleteUrl = "@Url.Action("DeleteJobTitle")";
+        popup.createTitle = "Add Job Title";
+        popup.editTitle = "Edit Job Title";
+        return popup;
+    })(popup || {});
+
+</script>
+<script src="~/js/modules/pop-up.js"></script>
+<script>
+    $(function () {
+        $("#btnClose").click(popup.closeClick);
+        $("#btnSave").click(popup.saveClick);
+    });
+    $(document).ready(function () {
+        $("#ParentName").attr("readonly", true);
+
+    });
+
+    $(document).ready(function () {
+        $("#SuperiorName").attr("readonly", true);
+        $("#SuperiorCode").attr("readonly", true);
+    });
+
+
+
+    if ($("#IsLegalEntity").val() === "True") {
+        //alert("yea");
+        $("#IsLegalEntityDummy").prop("checked", true);
+    }
+
+    function checkCategory() {
+        var category = $("#OrganizationUnitCategoryID").val();
+        if (category == 1) {
+            $("#parent-label").addClass("required-oi");
+            $(".parent-asterisk").addClass("fa fa-asterisk");
+        } else {
+            $("#parent-label").removeClass("required-oi");
+            $(".parent-asterisk").removeClass("fa fa-asterisk");
+        }
+        var checkBox = $("#IsLegalEntityDummy");
+        if (category == 3) {
+            checkBox.prop("disabled", true);
+            checkBox.prop("checked", true);
+            checkLegalEntity();
+        } else if (category == 2) {
+            checkBox.prop("disabled", true);
+            checkBox.prop("checked", false);
+            checkLegalEntity();
+        } else {
+            checkBox.prop("disabled", false);
+            //checkBox.prop("checked", false)
+            checkLegalEntity();
+        }
+    }
+</script>
+<script>
+     var windowOrgUnit = (function (e) {
+        return {
+            windowOptions: {
+                modal: true,
+                width: 800,
+                height: 340,
+                visible: false,
+                animation: {
+                    open: { effects: "slideIn:down fadeIn", duration: 350 },
+                    close: { effects: "slideIn:up fadeIn", reverse: true, duration: 200 }
+                },
+            }
+        };
+    })(jQuery);
+
+
+    var windowSuperior = (function (e) {
+        return {
+            windowOptions: {
+                modal: true,
+                width: 800,
+                height: 340,
+                visible: false,
+                animation: {
+                    open: { effects: "slideIn:down fadeIn", duration: 350 },
+                    close: { effects: "slideIn:up fadeIn", reverse: true, duration: 200 }
+                },
+            }
+        };
+    })(jQuery);
+
+    $(function () {
+        $("span.clearDateTimePickerPopUp").click(function () { datePicker_clearValue(this) });
+
+        $("#browseOrgUnit").kendoWindow(windowOrgUnit.windowOptions);
+         const windowBrowseOrgUnit = function (e)
+        {
+            e.preventDefault();
+
+            $("#browseOrgUnit").html(kendoWindowHelper.loadingTemplate);
+            $("#browseOrgUnit")
+                .data("kendoWindow")
+                .title("Browse Organization Unit")
+                .refresh({
+                    url:
+                        '@Url.Action("Index", "BrowseOrganizationUnit", new { area = "Organization", callback = "ParentID;ParentName" })'
+                })
+                .center()
+                .open();
+        };
+
+        $("#btnSearch1").click(windowBrowseOrgUnit);
+
+        $("#browseSuperior").kendoWindow(windowSuperior.windowOptions);
+
+        const windowBrowseSuperior = function (e)
+        {
+            e.preventDefault();
+
+            $("#browseSuperior").html(kendoWindowHelper.loadingTemplate);
+            $("#browseSuperior")
+                .data("kendoWindow")
+                .title("Browse Superior")
+                .refresh({
+                    url:
+                        '@Url.Action("Index", "BrowseSuperior", new { area = "Organization", callback = "SuperiorID;SuperiorName;SuperiorCode" })'
+                })
+                .center()
+                .open();
+        };
+
+        $("#btnSearch").click(windowBrowseSuperior);
+    });
+</script>

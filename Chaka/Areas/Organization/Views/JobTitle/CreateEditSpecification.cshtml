@@ -1,0 +1,272 @@
+﻿@model Chaka.ViewModels.Organization.JobTitle.CreateEditSpecificationViewModel
+
+@using Kendo.Mvc.UI
+
+
+<div class="container-fluid body-section bg-light-grey">
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addEditForm", name = "addEditForm", @class = "general-table-form" }))
+    {
+        @Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.JobTitleID)
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-2">@Html.LabelFor(m => m.LineID)</div>
+                            <div class="col-md-8">
+                                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                                @(Html.Kendo().DropDownListFor(x => x.LineID)
+                                          .HtmlAttributes(new { style = "width:100%", @class = "form-control" })
+                                          .OptionLabel("Select Parent...")
+                                      .DataTextField("Text")
+                                      .DataValueField("Value").Filter(FilterType.Contains)
+                                      .DataSource(source =>
+                                      {
+                                            source.Read(read =>
+                                            {
+                                                read.Action("GetLineOfBusiness", "JobTitle");
+                                            });
+                                      })
+                                )
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-2">@Html.LabelFor(m => m.JobFunctionID)</div>
+                            <div class="col-md-8">
+                                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                                @(Html.Kendo().DropDownListFor(x => x.JobFunctionID)
+                                          .HtmlAttributes(new { style = "width:100%", @class = "form-control" })
+                                          .OptionLabel("Select Parent...")
+                                      .DataTextField("Text")
+                                      .DataValueField("Value").Filter(FilterType.Contains)
+                                      .DataSource(source =>
+                                      {
+                                            source.Read(read =>
+                                            {
+                                                read.Action("GetJobFunction", "JobTitle");
+                                            });
+                                      })
+                                )
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-2">@Html.LabelFor(m => m.LevelEduID)</div>
+                            <div class="col-md-8">
+                                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                                @(Html.Kendo().DropDownListFor(x => x.LevelEduID)
+                                          .HtmlAttributes(new { style = "width:100%", @class = "form-control" })
+                                          .OptionLabel("Select Parent...")
+                                      .DataTextField("Text")
+                                      .DataValueField("Value").Filter(FilterType.Contains)
+                                      .DataSource(source =>
+                                      {
+                                            source.Read(read =>
+                                            {
+                                                read.Action("GetLevelEdu", "JobTitle");
+                                            });
+                                      })
+                                )
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-2">@Html.LabelFor(m => m.MinExp) </div>
+                            <div class="col-md-8">
+                                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                                @Html.Kendo().IntegerTextBoxFor(m => m.MinExp)
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-2">@Html.LabelFor(m => m.Descriptions) </div>
+                            <div class="col-md-8">
+                                <textarea name="Descriptions" id="Descriptions" class="form-control" required>@Model.Descriptions</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="content-wrapper">
+                        <h3> Unmapping Major</h3>
+
+                        <script>
+                                function getSelected() {
+                                    var items = [];
+                                    try {
+                                        $('#Selected option').each(function () {
+                                            items.push($(this).val());
+                                        });
+                                        return { selectedID: items };
+                                    } catch (e) {
+                                        return { selectedID: null };
+                                    }
+                                }
+                        </script>
+                        @(Html.Kendo().Grid(Model.ListUnSelected).Name("gridUnSelected").HtmlAttributes(new { @class = "Source" })
+                            .Columns(columns =>
+                            {
+                                columns.Bound(m => m.Code).Title("Code").Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").ShowOperators(false)));
+                                columns.Bound(m => m.Name).Title("Name").Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").ShowOperators(false)));
+                                columns.Bound(m => m.ID).Visible(false);
+                            })
+                            .Pageable(s => s.Refresh(true))
+                            .Filterable()
+                            .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                            .PersistSelection(true)
+                            .Sortable()
+                            .Filterable(f => { f.Mode(GridFilterMode.Row); f.Extra(false); f.Operators(op => op.ForString(str => str.Clear().Contains("contains"))); })
+                            .DataSource(ds => ds.Ajax().Read(r =>
+                            {
+                                r.Action("ListMajorUnselected", "JobTitle", new { JobTitleID = Model.JobTitleID, area = "Organization" });
+                                r.Data("getSelected");
+                            }))
+                        )
+                        @Html.ListBoxFor(x => x.NotSelected, new SelectList(Model.ListUnSelected, "ID", "Name"), new { Multiple = "multiple", Style = "display: none", @class = "source-selected" })
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <a class="btn btn-primary btnSelect" href="javascript:;">select<i class="fa fa-long-arrow-right"></i></a>
+                    <a class="btn btn-primary btnDeselect" href="javascript:;">Deselect<i class="fa fa-long-arrow-left"></i></a>
+                </div>
+                <div class="col-md-5">
+                    <div class="content-wrapper">
+                        <h3>Major</h3>
+                        <script>
+                                function getUnselected() {
+                                    var items = [];
+                                    try {
+                                        $('#NotSelected option').each(function () {
+                                            items.push($(this).val());
+                                        });
+                                        return { unselectedID: items };
+                                    } catch (e) {
+                                        return { unselectedID: null };
+                                    }
+                                }
+                        </script>
+                        @(Html.Kendo().Grid(Model.ListSelected).Name("gridSelected").HtmlAttributes(new { @class = "Target" })
+                            .Columns(columns =>
+                            {
+                                columns.Bound(m => m.Code).Title("Code").Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").ShowOperators(false)));
+                                columns.Bound(m => m.Name).Title("Name").Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").ShowOperators(false)));
+                                columns.Bound(m => m.ID).Visible(false);
+
+                            })
+                            .Pageable(s => s.Refresh(true))
+                            .Filterable()
+                            .Selectable(selectable => selectable.Mode(GridSelectionMode.Multiple))
+                            .PersistSelection(true)
+                            .Sortable()
+                            .Filterable(f => { f.Mode(GridFilterMode.Row); f.Extra(false); f.Operators(op => op.ForString(str => str.Clear().Contains("contains"))); })
+                            .DataSource(ds => ds.Ajax().Read(r =>
+                            {
+                                r.Action("ListMajorSelected", "JobTitle", new { JobTitleID = Model.JobTitleID, area = "Organization" });
+                                r.Data("getUnselected");
+                            }))
+                        )
+                        @Html.ListBoxFor(x => x.Selected, new SelectList(Model.ListSelected, "ID", "Name"), new { Multiple = "multiple", Style = "display: none", @class = "target-selected" })
+                        <script>
+                                $(document).ready(function () {
+                                    $("#Selected option").each(function () {
+                                        $(this).attr("selected", true);
+                                    });
+                                });
+                        </script>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <button type="submit" id="btnSave" name="btnSave" class="btn btn-primary">Save</button>
+            <button type="button" id="btnClose" name="btnClose" class="btn btn-primary">Close</button>
+        </div>
+    }
+</div>
+
+
+<script>
+
+    var createEdit = (function (createEdit) {
+        createEdit.createUrl = "@Url.Action("CreateSpecification")";
+        createEdit.editUrl = "@Url.Action("EditSpecification")";
+        createEdit.gridID = "grid";
+        return createEdit;
+    })(createEdit || {});
+</script>
+<script src="~/js/modules/save-create-edit.js"></script>
+
+<script>
+
+    $(function () {
+        $(".btnSelect").on("click", function (e) {
+            e.preventDefault();
+            var grid1 = $(this).closest(".col-md-12").find(".Source").data("kendoGrid");
+            var grid2 = $(this).closest(".col-md-12").find(".Target").data("kendoGrid");
+            var source = $(this).closest(".col-md-12").find(".source-selected");
+            var target = $(this).closest(".col-md-12").find(".target-selected");
+            moveTo(grid1, grid2, source, target, "select");
+            grid1.dataSource.read();
+            grid1.refresh();
+            grid2.dataSource.read();
+            grid2.refresh();
+        });
+
+        $(".btnDeselect").on("click", function (e) {
+            e.preventDefault();
+            var grid1 = $(this).closest(".col-md-12").find(".Source").data("kendoGrid");
+            var grid2 = $(this).closest(".col-md-12").find(".Target").data("kendoGrid");
+            var source = $(this).closest(".col-md-12").find(".source-selected");
+            var target = $(this).closest(".col-md-12").find(".target-selected");
+            moveTo(grid2, grid1, source, target, "deselect");
+            grid1.dataSource.read();
+            grid1.refresh();
+            grid2.dataSource.read();
+            grid2.refresh();
+        });
+
+        function moveTo(from, to, source, target, status) {
+            var selected = from.select();
+            if (selected.length > 0) {
+                var items = [];
+                var fromDS = from.dataSource;
+                var toDS = to.dataSource;
+                $.each(selected, function (id, val) {
+                    items.push(from.dataItem(val));
+                });
+                $.each(items, function (id, val) {
+                    if (status == "select") {
+                        source.find('option[value=' + val["ID"] + ']').remove();
+                        target.append('<option value="' + val["ID"] + '" selected="selected">' + val["Name"] + '</option>');
+                    }
+                    else {
+                        target.find('option[value=' + val["ID"] + ']').remove();
+                        source.append('<option value="' + val["ID"] + '" selected="selected">' + val["Name"] + '</option>');
+                    }
+                    toDS.add(val);
+                    fromDS.remove(val);
+                });
+            }
+        }
+    });
+</script>
+
+
+<script>
+    $(function () {
+        $("#btnClose").click(popup.closeClick);
+    });
+</script>

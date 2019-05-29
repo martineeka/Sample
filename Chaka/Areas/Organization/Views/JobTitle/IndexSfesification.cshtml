@@ -1,0 +1,124 @@
+﻿@model Chaka.ViewModels.Organization.JobTitle.IndexDetailViewModel
+@{
+    ViewData["Title"] = "Job Spesification";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+
+<div class="head-section content-padding">
+    <h2 class="page-title">Job Title - Spesification</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Organization</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index","JobTitle")">Job Title</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Job Spesification</li>
+        </ol>
+    </nav>
+</div>
+
+<style type="text/css">
+    .custombtn {
+        margin-right: 5px;
+        margin-bottom: 5px;
+        margin-top: 5px
+    }
+</style>
+
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+                @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "general-table-form" }))
+                {
+                    @Html.ListBox("list-all-item", new List<SelectListItem>())
+                    @Html.ListBox("list-check", new List<SelectListItem>())
+                    @Html.ValidationSummary()
+                    <table class="header-detail">
+                        <tr>
+                            <td>Job Title Code </td>
+                            <td>: @Model.JobTitleCode</td>
+                            <td></td>
+                            <td>Job Level Category </td>
+                            <td>: @Model.JobLevelCategory</td>
+                        </tr>
+                        <tr>
+                            <td>Job Title Name </td>
+                            <td>: @Model.JobTitleName</td>
+                            <td></td>
+                            <td>Description </td>
+                            <td>: @Model.Description</td>
+                        </tr>
+                        <tr>
+                            <td>Job Status </td>
+                            <td>: @Model.JobStatus</td>
+                            <td></td>
+                            <td>Begin Effective </td>
+                            <td>: @Model.BeginEff</td>
+                        </tr>
+                        <tr>
+                            <td>Job Level </td>
+                            <td>: @Model.JobLevel</td>
+                            <td></td>
+                            <td>Last Effective </td>
+                            <td>: @Model.LastEff</td>
+                        </tr>
+                    </table>
+
+                    <div class="btn-group">
+                        <a href="@Url.Action("Index")" class="btn btn-info custombtn"><i class="fa fa-plus"></i> Back</a>
+                        <a data-id="@Model.EncryptedJobTitleID" href="javascript:;" class="btn btn-success custombtn" id="btnAddNewDetail"><i class="fa fa-plus"></i> Add New</a>
+                        <button type="submit" class="btn btn-danger custombtn" id="btnDelete" name="btnDelete"><i class="fa fa-minus"></i> Delete</button>
+                    </div>
+                    @(Html.Kendo().Grid<Chaka.ViewModels.Organization.JobTitle.ListSpesificationViewModel>()
+                           .Name("grid")
+                           .Columns(col =>
+                           {
+                               col.Bound("").ClientHeaderTemplate(@"<input type='checkbox' id='chkAll' onclick='checkAll()'/>")
+                                     .ClientTemplate(@"<input type='checkbox' class='Check' name='chkDelete' value='#=ID#' data-id='#=ID#' />")
+                                     .Width(50).HtmlAttributes(new { Class = "check-box-column" });
+                               col.Bound("").ClientTemplate("<a data-id='#=ID#' href='javascript:;' class='btn btn-primary  editRow'>Edit</a>").Width(100).Title("").Filterable(false);
+                               col.Bound(p => p.LineOfBussiness);
+                               col.Bound(p => p.JobFunction);
+                               col.Bound(p => p.LevelEducation);
+                               col.Bound(p => p.MinExp);
+                               col.Bound(p => p.Descriptions);
+                           })
+                           .PersistSelection()
+                           .Pageable()
+                           .Sortable()
+                           .Filterable(filter =>
+                                   {
+                                       filter.Extra(false);
+                                       filter.Operators(op =>
+                                       {
+                                           op.ForString(str => str.Clear());
+                                           op.ForString(str =>
+                                           {
+                                               str.Clear().Contains("Contains");
+                                   });
+                               });
+                           })
+                           .DataSource(dataSource => dataSource
+                           .Ajax()
+                           .Read(read => read.Action("SpesificationList", "JobTitle", new { area = "Organization", jobTitleID = Model.ID })))
+                    )}
+            </div>
+        </div>
+        <div id="addEditWindow"></div>
+    </div>
+</div>
+
+<script>
+    var popup = (function (popup) {
+        popup.width = 210000;
+        popup.height = 900;
+        popup.createDetailUrl = "@Url.Action("CreateSpecification")";
+        //popup.createUrl = "@Url.Action("EditSpecification")";
+        popup.editUrl = "@Url.Action("EditSpecification", new { JobTitleID = Model.EncryptedJobTitleID})";
+        popup.deleteUrl = "@Url.Action("DeleteSpecification")";
+        popup.createTitle = "Add Job Spesification";
+        popup.editTitle = "Edit Job Spesification";
+        return popup;
+    })(popup || {});
+</script>
+<script src="~/js/modules/pop-up.js"></script>

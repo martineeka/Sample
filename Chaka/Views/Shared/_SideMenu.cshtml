@@ -1,0 +1,104 @@
+﻿@*@model Chaka.ViewModels.SystemAdmin.Menu.SideMenuViewModel*@
+@using Chaka.Utilities
+<div class="side-nav-container">
+    <div class="side-nav-container">
+        <ul class="side-nav-wrapper">
+            <li class="side-nav-item">
+                <a href="./index.html">
+                    <i class="material-icons">folder_open</i>
+                    Dashboard
+                </a>
+            </li>
+            <li class="side-nav-item">
+                <a href="javascript:;" class="collapsible-trigger">
+                    <i class="material-icons">folder_open</i>
+                    Organization
+                    <i class="material-icons grow-left arrow">keyboard_arrow_down</i>
+                </a>
+                <ul class="collapsible-target">
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Level Category", "Index", "LevelCategory", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Level", "Index", "Level", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Job Status", "Index", "JobStatus", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Job Title", "Index", "JobTitle", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Line Of Business", "Index", "LineOfBusiness", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Job Function", "Index", "JobFunction", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Cost Center", "Index", "CostCenter", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Organization Level", "Index", "OrganizationLevel", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Job Family", "Index", "JobFamily", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Group Grade", "Index", "GroupGrade", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Location", "Index", "Location", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Job Master", "Index", "JobMaster", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Location Classification ", "Index", "LocationClassification", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Country ", "Index", "Country", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Organization Unit Change", "Index", "OrganizationUnitChange", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Organization Report", "Index", "OrganizationReport", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Report Log Change", "IndexLog", "OrganizationReport", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("SIUP Class ", "Index", "SIUPClass", new { Area = "Organization" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Business Field Regulation ", "Index", "BusinessFieldRegulation", new { Area = "Organization" }, null)
+                    </li>
+                </ul>
+            </li>
+            <li class="side-nav-item">
+                <a href="javascript:;" class="collapsible-trigger">
+                    <i class="material-icons">folder_open</i>
+                    System Admin
+                    <i class="material-icons grow-left arrow">keyboard_arrow_down</i>
+                </a>
+                <ul class="collapsible-target">
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Menu", "Index", "Menu", new { Area = "SystemAdmin" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Employee Information Restriction Group", "Index", "EmployeeInfoRestrictionGroup", new { Area = "SystemAdmin" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Responsibility", "Index", "Responsibility", new { Area = "SystemAdmin" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("Responsibility Group", "Index", "ResponsibilityGroup", new { Area = "SystemAdmin" }, null)
+                    </li>
+                    <li class="side-nav-item">
+                        @Html.ActionLink("User", "Index", "User", new { Area = "SystemAdmin" }, null)
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

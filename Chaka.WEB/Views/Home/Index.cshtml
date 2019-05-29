@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@model TestClass
+@using Kendo.Mvc.UI
+
+<div class="head-section content-padding">
+    <h2 class="page-title">Dashboard</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+        </ol>
+    </nav>
+</div>
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+                <h3 class="content-title">Some Title</h3>
+                <div class="content-body"><p>Grid...</p></div>
+                @(Html.Kendo().Grid<Chaka.WEB.Models.ListTest>()
+                         .Name("grid")
+                         .Columns(columns =>
+                         {
+                             columns.Bound(c => c.A).Width(140);
+                             columns.Bound(c => c.B).Width(190);
+                             columns.Bound(c => c.C).Width(190);
+                             columns.Bound(c => c.D).Width(110);
+                         })
+                         .HtmlAttributes(new { style = "height: 380px;" })
+                         .Scrollable()
+                         .Groupable()
+                         .Sortable()
+                         .Pageable(pageable => pageable
+                             .Refresh(true)
+                             .PageSizes(true)
+                             .ButtonCount(5))
+                         .DataSource(dataSource => dataSource
+                             .Ajax()
+                             .Read(read => read.Action("List", "Home"))
+                         )
+                )
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function (event) {
+        $(".new").click(function (event) {
+            debugger;
+                var actionURL = '@(Url.Action("Create", "Home"))';
+            $.ajax({
+                type: "GET",
+                url: actionURL,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true,
+                success: function (data) {
+
+                    $("#MyModal").modal();
+                },
+                error: function (response) {
+                    alert("Ajax Failed")
+                }
+            });
+        });
+
+    });
+</script>
+

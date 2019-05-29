@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\SystemAdmin\Data\**" />
+    <Compile Remove="Areas\SystemAdmin\Models\**" />
+    <Compile Remove="Areas\SystemAdmin\Views\**" />
+    <Content Remove="Areas\SystemAdmin\Data\**" />
+    <Content Remove="Areas\SystemAdmin\Models\**" />
+    <Content Remove="Areas\SystemAdmin\Views\**" />
+    <EmbeddedResource Remove="Areas\SystemAdmin\Data\**" />
+    <EmbeddedResource Remove="Areas\SystemAdmin\Models\**" />
+    <EmbeddedResource Remove="Areas\SystemAdmin\Views\**" />
+    <None Remove="Areas\SystemAdmin\Data\**" />
+    <None Remove="Areas\SystemAdmin\Models\**" />
+    <None Remove="Areas\SystemAdmin\Views\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="2.2.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.4.10" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="4.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="4.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="4.0.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.4.0" />
+    <PackageReference Include="Telerik.UI.for.AspNet.Core" Version="2019.1.220" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Chaka.Database.Context\Chaka.Database.Context.csproj" />
+    <ProjectReference Include="..\Chaka.Providers.SystemAdmin\Chaka.Providers.SystemAdmin.csproj" />
+    <ProjectReference Include="..\Chaka.Providers\Chaka.Providers.csproj" />
+    <ProjectReference Include="..\Chaka.Utilities\Chaka.Utilities.csproj" />
+  </ItemGroup>
+
+
+</Project>

@@ -1,0 +1,413 @@
+=======================================================================================================================================================================
+230519 Edi : start 
+add 2 tables
+
+/****** Object:  Table [SysAdmin].[CoreDefinition]    Script Date: 5/23/2019 11:29:59 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [SysAdmin].[CoreDefinition](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Code] [varchar](10) NOT NULL,
+	[Name] [varchar](200) NOT NULL,
+	[Description] [varchar](500) NULL,
+	[BusinessGroupID] [int] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[UpdatedBy] [int] NULL,
+	[UpdatedDate] [datetime] NULL,
+	[DelDate] [datetime] NULL,
+ CONSTRAINT [PK_CoreDefiniton] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+ USE [Chaka]
+GO
+
+/****** Object:  Table [SysAdmin].[CoreFilter]    Script Date: 5/23/2019 11:31:53 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [SysAdmin].[CoreFilter](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[EmployeeListFilterID] [int] NOT NULL,
+	[CoreID] [int] NOT NULL,
+	[DetailID] [int] NOT NULL,
+	[BusinessGroupID] [int] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[UpdatedBy] [int] NULL,
+	[UpdatedDate] [datetime] NULL,
+ CONSTRAINT [PK_CoreFilter] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [SysAdmin].[CoreFilter]  WITH CHECK ADD  CONSTRAINT [FK_CoreFilter_CoreDefinition] FOREIGN KEY([ID])
+REFERENCES [SysAdmin].[CoreDefinition] ([ID])
+GO
+
+ALTER TABLE [SysAdmin].[CoreFilter] CHECK CONSTRAINT [FK_CoreFilter_CoreDefinition]
+GO
+
+ALTER TABLE [SysAdmin].[CoreFilter]  WITH CHECK ADD  CONSTRAINT [FK_CoreFilter_EmployeeListFilter] FOREIGN KEY([ID])
+REFERENCES [SysAdmin].[EmployeeListFilter] ([ID])
+GO
+
+ALTER TABLE [SysAdmin].[CoreFilter] CHECK CONSTRAINT [FK_CoreFilter_EmployeeListFilter]
+GO
+
+end edi----
+=======================================================================================================================================================================
+
+200519 Edi : start--- >> add BeginEff & LastEff in table Location
+ALTER TABLE [Core].[Location] ADD  [BeginEff] [date] NOT NULL;
+ALTER TABLE [Core].[Location] ADD  [LastEff] [date]  NULL;
+ 
+---end edi
+=======================================================================================================================================================================
+
+
+20 Mei 2019 >> Tambah Kolom Kategori di OrgUnitTransactionDetail
+>>Tambah Tabel OrgUnitChangeStatus
+
+ALTER TABLE [Core].[OrgUnitTransactionDetail] ADD [Category] [varchar](10) NOT NULL;
+
+ALTER TABLE [Core].[OrgUnitTransactionDetail]  WITH CHECK ADD  CONSTRAINT [FK_OrgUnitTransactionDetail_OrgUnitChangeStatus] FOREIGN KEY([StatusID])
+REFERENCES [General].[OrgUnitChangeStatus] ([ID])
+GO
+
+ALTER TABLE [Core].[OrgUnitTransactionDetail] CHECK CONSTRAINT [FK_OrgUnitTransactionDetail_OrgUnitChangeStatus]
+GO
+
+
+USE [Chaka]
+GO
+
+/****** Object:  Table [General].[OrgUnitChangeStatus]    Script Date: 20/05/2019 15:49:46 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [General].[OrgUnitChangeStatus](
+	[ID] [int] NOT NULL,
+	[Code] [varchar](10) NOT NULL,
+	[Name] [varchar](50) NOT NULL,
+	[Description] [varchar](500) NULL,
+	[IsActive] [bit] NOT NULL,
+ CONSTRAINT [PK_TransactionStatus] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+================================================================================================
+
+TGL 21 Mei 2019
+
+/*********** QUERY Utk membuat table JobFunction, LineOfBusiness, JobSpesification, JobSpesificationMajor**********************/
+USE [Chaka]
+GO
+/****** Object:  Table [Core].[JobFunction]    Script Date: 5/21/2019 4:24:30 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [Core].[JobFunction](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Code] [varchar](20) NOT NULL,
+	[Name] [varchar](50) NOT NULL,
+	[Description] [varchar](500) NOT NULL,
+	[BusinessGroupID] [int] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[UpdatedBy] [int] NULL,
+	[UpdatedDate] [datetime] NULL,
+	[DelDate] [datetime] NULL,
+ CONSTRAINT [PK_JobFunction] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [Core].[JobtitleSpecification]    Script Date: 5/21/2019 4:24:30 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [Core].[JobtitleSpecification](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[JobTitleID] [int] NOT NULL,
+	[LineID] [int] NOT NULL,
+	[JobFunctionID] [int] NOT NULL,
+	[LevelEduID] [int] NOT NULL,
+	[MinExp] [int] NULL,
+	[Descriptions] [varchar](500) NOT NULL,
+	[BusinessGroupID] [int] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[UpdatedBy] [int] NULL,
+	[UpdatedDate] [datetime] NULL,
+	[DelDate] [datetime] NULL,
+ CONSTRAINT [PK_JobtitleSpecification] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [Core].[JobtitleSpecificationMajor]    Script Date: 5/21/2019 4:24:30 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [Core].[JobtitleSpecificationMajor](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[JobtitleSpecificationID] [int] NOT NULL,
+	[MajorID] [int] NOT NULL,
+	[BusinessGroupID] [int] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[UpdatedBy] [int] NULL,
+	[UpdatedDate] [datetime] NULL,
+	[DelDate] [datetime] NULL,
+ CONSTRAINT [PK_JobtitleSpecificationMajor] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [Core].[LineOfBusiness]    Script Date: 5/21/2019 4:24:30 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [Core].[LineOfBusiness](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Code] [varchar](20) NOT NULL,
+	[Name] [varchar](50) NOT NULL,
+	[Description] [varchar](500) NOT NULL,
+	[BusinessGroupID] [int] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[UpdatedBy] [int] NULL,
+	[UpdatedDate] [datetime] NULL,
+	[DelDate] [datetime] NULL,
+ CONSTRAINT [PK_LineOfBusiness] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [Preference].[LevelEdu]    Script Date: 5/21/2019 4:24:30 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [Preference].[LevelEdu](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Code] [varchar](20) NOT NULL,
+	[Name] [varchar](50) NOT NULL,
+	[Description] [varchar](500) NOT NULL,
+	[IsActive] [bit] NOT NULL,
+	[BusinessGroupID] [int] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[UpdatedBy] [int] NULL,
+	[UpdatedDate] [datetime] NULL,
+	[DelDate] [datetime] NULL,
+ CONSTRAINT [PK_LevelEdu] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [Core].[JobtitleSpecification]  WITH CHECK ADD  CONSTRAINT [FK_JobtitleSpecification_JobFunction] FOREIGN KEY([JobFunctionID])
+REFERENCES [Core].[JobFunction] ([ID])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [Core].[JobtitleSpecification] CHECK CONSTRAINT [FK_JobtitleSpecification_JobFunction]
+GO
+ALTER TABLE [Core].[JobtitleSpecification]  WITH CHECK ADD  CONSTRAINT [FK_JobtitleSpecification_JobTitle] FOREIGN KEY([JobTitleID])
+REFERENCES [Core].[JobTitle] ([ID])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [Core].[JobtitleSpecification] CHECK CONSTRAINT [FK_JobtitleSpecification_JobTitle]
+GO
+ALTER TABLE [Core].[JobtitleSpecification]  WITH CHECK ADD  CONSTRAINT [FK_JobtitleSpecification_JobtitleSpecification] FOREIGN KEY([ID])
+REFERENCES [Core].[JobtitleSpecification] ([ID])
+GO
+ALTER TABLE [Core].[JobtitleSpecification] CHECK CONSTRAINT [FK_JobtitleSpecification_JobtitleSpecification]
+GO
+ALTER TABLE [Core].[JobtitleSpecification]  WITH CHECK ADD  CONSTRAINT [FK_JobtitleSpecification_LineOfBusiness] FOREIGN KEY([LineID])
+REFERENCES [Core].[LineOfBusiness] ([ID])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [Core].[JobtitleSpecification] CHECK CONSTRAINT [FK_JobtitleSpecification_LineOfBusiness]
+GO
+ALTER TABLE [Core].[JobtitleSpecificationMajor]  WITH CHECK ADD  CONSTRAINT [FK_JobtitleSpecificationMajor_JobtitleSpecification] FOREIGN KEY([JobtitleSpecificationID])
+REFERENCES [Core].[JobtitleSpecification] ([ID])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [Core].[JobtitleSpecificationMajor] CHECK CONSTRAINT [FK_JobtitleSpecificationMajor_JobtitleSpecification]
+GO
+
+
+=======================================================================================================
+Tgl 20 Mei 2019
+
+alter table Core.JobDescription DROP COLUMN  Code
+alter table Core.JobDescription DROP COLUMN  Name
+alter table Core.JobDescription DROP COLUMN  Description
+alter table Core.JobDescription ADD JobMasterID int NOT NULL
+
+======================================================================================
+/****** Query Untuk Membuat Table Job Master   Script Date: 10/05/2019 13:31:37 ******/
+USE [Chaka]
+GO
+
+/****** Object:  Table [Core].[JobMaster]    Script Date: 10/05/2019 13:31:37 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [Core].[JobMaster](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Code] [varchar](10) NOT NULL,
+	[Name] [varchar](50) NOT NULL,
+	[Description] [varchar](500) NULL,
+	[BusinessGroupID] [int] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[UpdatedBy] [int] NULL,
+	[UpdatedDate] [datetime] NULL,
+	[DelDate] [datetime] NULL,
+ CONSTRAINT [PK_JobMaster] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+=============================================================================================
+
+10 mei 2019 >> Update kolom di tabel Level, JobTitleRequirement 
+>>Add Table EducationFaculty & EducationMajor
+
+ALTER TABLE [Core].[Level] ADD  [LevelCategoryID] [int] NOT NULL;
+ALTER TABLE [SysAdmin].[Menu] RENAME 
+
+ALTER TABLE [Core].[JobtitleRequirement] ALTER COLUMN [Descriptions] [varchar](500) NULL;
+
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [General].[EducationFaculty](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Code] [varchar](10) NOT NULL,
+	[Name] [varchar](50) NOT NULL,
+	[Description] [varchar](500) NULL,
+	[IsActive] [bit] NOT NULL,
+	[BusinessGroupID] [int] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[UpdatedBy] [int] NULL,
+	[UpdatedDate] [datetime] NULL,
+	[DelDate] [datetime] NULL,
+ CONSTRAINT [PK_EducationMajorGroup] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [General].[EducationMajor]    Script Date: 09/05/2019 16:23:09 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [General].[EducationMajor](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[EducationMajorFacID] [int] NOT NULL,
+	[Code] [varchar](10) NOT NULL,
+	[Name] [varchar](50) NOT NULL,
+	[Description] [varchar](100) NULL,
+	[IsActive] [bit] NOT NULL,
+	[BusinessGroupID] [int] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[UpdatedBy] [int] NULL,
+	[UpdatedDate] [datetime] NULL,
+	[DelDate] [datetime] NULL,
+ CONSTRAINT [PK_EducationMajor] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+ALTER TABLE [General].[EducationMajor]  WITH CHECK ADD  CONSTRAINT [FK_EducationMajor_EducationMajorFaculty] FOREIGN KEY([EducationMajorFacID])
+REFERENCES [General].[EducationFaculty] ([ID])
+GO
+ALTER TABLE [General].[EducationMajor] CHECK CONSTRAINT [FK_EducationMajor_EducationMajorFaculty]
+GO
+
+>> 21 Mei 2019
+EXEC SP_RENAME 'SysAdmin.Menu.Name','NameINA','COLUMN';
+
+ALTER TABLE [SysAdmin].[Menu] ADD [NameENG] [varchar](100);
+
+EXEC SP_RENAME 'SysAdmin.Function.Description','DescriptionINA','COLUMN';
+
+ALTER TABLE [SysAdmin].[Function] ADD [DescriptionENG] [varchar](255);
+>> 
+
+=========================================================================================
+
+Dani - 22 Mei 2019 15:00
+
+ALTER table Core.OrganizationLevel DROP COLUMN MajorID
+ALTER table Core.OrganizationLevel DROP COLUMN JobFamilyID
+ALTER table Core.OrganizationLevel ADD Code NVARCHAR(50) NOT NULL
+ALTER table Core.OrganizationLevel ADD Name NVARCHAR(200) NULL
+ALTER table Core.OrganizationLevel ADD Description NVARCHAR(200) NULL
+ALTER TABLE Core.OrganizationLevel ADD Level INT NOT NULL
+
+=========================================================================================
+
+Dani - 23 Mei 2019 07:54
+
+ALTER TABLE Core.CostCenter DROP COLUMN IsActive
+ALTER TABLE Core.CostCenter DROP COLUMN IsInternal
+
+

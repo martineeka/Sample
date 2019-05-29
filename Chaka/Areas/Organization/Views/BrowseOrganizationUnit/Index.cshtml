@@ -1,0 +1,83 @@
+﻿@model Chaka.ViewModels.Browse.IndexBrowseOrganizationUnitViewModel
+@using Kendo.Mvc.UI
+
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+                @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "general-table-form" }))
+                {
+                    @Html.HiddenFor(m => m.Callback)
+
+                    @(Html.Kendo().Grid(Model.List).Name("gridBrowseOrgUnit").EnableCustomBinding(true)
+                            .Columns(col =>
+                            {
+                                //col.Bound("").ClientTemplate("<a data-id='#=ID#' href='javascript:;' class='btn btn-primary'>Select</a>").Width(100).Title("").Filterable(false);
+                                col.Bound("").ClientTemplate("<a id='select' data-return-0='#=ID#' data-return-1='#=Name#' class='btn btn-primary editRow select'>Select</a>").Width(80).Title("").Filterable(false);
+                                col.Bound(p => p.Code);
+                                col.Bound(p => p.Name);
+                                col.Bound(p => p.Location);
+                                col.Bound(p => p.CostCenter);
+                                col.Bound(p => p.Description);
+                            })
+                            .Pageable()
+                            .Selectable(x => x.Mode(GridSelectionMode.Single))
+                            .Filterable(filter =>
+                            {
+                                filter.Extra(false);
+                                filter.Operators(op =>
+                                {
+                                    op.ForString(str => str.Clear());
+                                    op.ForString(str =>
+                                    {
+                                        str.Clear().Contains("Contains");
+                                    });
+                                });
+                            })
+                            .Scrollable()
+                            .DataSource(ds => ds.Ajax().Read("List", "BrowseOrganizationUnit", new { area = "Organization" }).Sort(s => s.Add("Name")))
+                            .Sortable(x => x.SortMode(GridSortMode.SingleColumn))
+                            .Resizable(x => x.Columns(true))
+                       
+                             )
+                 }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(function ()
+    {
+        "option strict";
+
+        $("#gridBrowseOrgUnit").on("click", "#select", function (e)
+        {
+            var callback = "@Model.Callback";
+            if (callback.length > 0)
+            {
+                var callbackArray = callback.split(";");
+                var that = this;
+                if (callbackArray.length == 2)
+                {
+                    $.each(callbackArray, function (index, arg)
+                    {
+                        var value = (index == 0) ? $(that).attr("data-return-" + index) :
+                            $(that).attr("data-return-" + index);
+                        $("#" + arg).val(value);
+                    });
+                } else
+                {
+                    $.each(callbackArray, function (index, arg)
+                    {
+                        $("#" + arg).val($(that).attr("data-return-" + index));
+                    });
+                }
+            }
+
+            $("#browseOrgUnit").data("kendoWindow").close();
+        });
+
+    });
+</script>

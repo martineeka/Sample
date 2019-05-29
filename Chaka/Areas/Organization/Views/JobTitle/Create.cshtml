@@ -1,0 +1,347 @@
+﻿@{
+    ViewData["Title"] = "Job Title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+
+<div class="head-section content-padding">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Organization</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Job Title</li>
+            <li class="breadcrumb-item active" aria-current="page">Add Job Title</li>
+        </ol>
+    </nav>
+</div>
+
+<style type="text/css">
+    .custombtn {
+        margin-right: 5px;
+        margin-bottom: 5px;
+        margin-left: 15px;
+        margin-top: 5px;
+    }
+</style>
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            @model Chaka.ViewModels.Organization.JobTitle.IndexNewPageViewModel
+            @using Kendo.Mvc.UI
+            <form id="addEditForm" name="addEditForm" class="general-table-form" action="@Url.Action("SaveJobTitle", "JobTitle")" method="POST">
+                <div class="content-wrapper">
+                    @Html.HiddenFor(m => m.ID)
+                    @Html.HiddenFor(m => m.JobLevelCategoryID)
+                    <div class="form-horizontal">
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <div class="col-md-4">@Html.LabelFor(m => m.Code) </div>
+                                <div class="col-md-8">
+                                    <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                                    <input type="text" name="Code" class="form-control" value="@(Model.Code)" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-4">@Html.LabelFor(m => m.Name) </div>
+                                <div class="col-md-8">
+                                    <input type="text" name="Name" class="form-control" value="@(Model.Name)" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-4">@Html.LabelFor(m => m.JobStatusID)</div>
+                                <div class="col-md-8">
+                                    <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                                    @(Html.Kendo().DropDownListFor(x => x.JobStatusID)
+                                                .HtmlAttributes(new { @class = "form-control" })
+                                                .OptionLabel("Select Job Status...")
+                                                .DataTextField("Text")
+                                                .DataValueField("Value").Filter(FilterType.Contains)
+                                                .DataSource(source =>
+                                                {
+                                                    source.Read(read =>
+                                                    {
+                                                        read.Action("GetJobStatus", "JobTitle");
+                                                    });
+                                                })
+                                    )
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-4">@Html.LabelFor(m => m.JobLevelID)</div>
+                                <div class="col-md-8">
+                                    <span class="required-field"><i class="fa fa-asterisk"></i></span>
+
+                                    @(Html.Kendo().DropDownListFor(x => x.JobLevelID)
+                                                .HtmlAttributes(new { @class = "form-control" })
+                                                .OptionLabel("Select Job Level...")
+                                                .DataTextField("Text")
+                                                .DataValueField("Value").Filter(FilterType.Contains)
+                                                .DataSource(source =>
+                                                {
+                                                    source.Read(read =>
+                                                    {
+                                                        read.Action("GetLevel", "JobTitle");
+                                                    });
+                                                })
+                                    )
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-4">@Html.LabelFor(m => m.JobLevelCategory) </div>
+                                <div class="col-md-8">
+                                    @*<input class="form-control" name="JobLevelCategory" id="JobLevelCategory" value="@Model.JobLevelCategoryID" />*@
+                                    @Html.Kendo().TextBoxFor(m => m.JobLevelCategory).HtmlAttributes(new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">@Html.LabelFor(m => m.JobFamilyID)</div>
+                                <div class="col-md-8">
+                                    <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                                    @(Html.Kendo().DropDownListFor(x => x.JobFamilyID)
+                                                .HtmlAttributes(new { @class = "form-control" })
+                                                .OptionLabel("Select Job Family...")
+                                                .DataTextField("Text")
+                                                .DataValueField("Value").Filter(FilterType.Contains)
+                                                .DataSource(source =>
+                                                {
+                                                    source.Read(read =>
+                                                    {
+                                                        read.Action("GetJobFamily", "JobTitle");
+                                                    });
+                                                })
+                                    )
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-4">@Html.LabelFor(m => m.BeginEff) </div>
+                                <div class="col-md-8">
+                                    <i class="required-field fa fa-asterisk"></i>
+                                    @Html.Kendo().DatePickerFor(m => m.BeginEff).Max(Model.LastEff.HasValue ? Model.LastEff.Value : DateTime.MaxValue).HtmlAttributes(new { type = "text", placeholder = "Select date", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">@Html.LabelFor(m => m.LastEff) </div>
+                                <div class="col-md-8">
+                                    <i class="required-field"></i>
+                                    @Html.Kendo().DatePickerFor(m => m.LastEff).Min(Model.BeginEff.Value).HtmlAttributes(new { type = "text", placeholder = "Select date", @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-4">@Html.LabelFor(m => m.Description)</div>
+                                <div class="col-md-8">
+                                    @Html.EditorFor(m => m.Description, "Description")
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                        </div>
+                    </div>
+                </div>
+
+                @(Html.Kendo().PanelBar()
+                    .Name("panelbar")
+                    .ExpandMode(PanelBarExpandMode.Single)
+                    .Items(panelbar =>
+                    {
+                        panelbar.Add().Text("Job Description")
+                            .Expanded(false)
+                            .Content(
+                            @<div>
+                                 <div class="btn-group">
+                                     <a href="javascript:;" class="btn btn-success custombtn" id="btnAddNew" style="font-size:12px; margin-left:5px"><i class="fa fa-plus"></i> List Job Master</a>
+                                 </div>
+                                @(Html.Kendo().Grid<Chaka.ViewModels.Organization.JobTitle.ListDescriptionViewModel>()
+                                  .Name("gridMapping")
+                                  .Columns(col =>
+                                  {
+                                      col.Bound(p => p.Code);
+                                      col.Bound(p => p.Name);
+                                      col.Bound(p => p.Description);
+                                  }).PersistSelection()
+                                    .Pageable()
+                                    .Sortable()
+                                    .DataSource(dataSource => dataSource
+                                    .Ajax()
+                                    ))
+                            </div>);
+
+                        panelbar.Add().Text("Job Specification")
+                          .Expanded(false)
+                          .Content(@<div></div>);
+                    })
+                )
+
+                <div class="content-wrapper">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <button type="submit" id="btnSave" name="btnSave" class="btn btn-primary">Save</button>
+                                <button type="button" id="btnClose" name="btnClose" class="btn btn-primary">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="addEditWindow"></div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $("#btnClose").click(popup.closeClick);
+        $("#btnSave").click(popup.saveClick);
+    });
+
+    $(document).ready(function () {
+        $("#JobLevelCategory").attr("readonly", true);
+
+        $("#JobLevelID").change(getCategory);
+        $("#BeginEff").change(startChange);
+        $("#LastEff").change(endChange);
+
+    });
+</script>
+
+<script>
+    var popup = (function (popup) {
+        popup.width = 210000;
+        popup.height = 900;
+        popup.GetDataDescription = "@Url.Action("GetDataDescription", new {headerID= "0" })";
+        popup.createUrl = "@Url.Action("Create")";
+        popup.editUrl = "@Url.Action("Edit")";
+        popup.deleteUrl = "@Url.Action("Delete")";
+        popup.createTitle = "Add Job Title";
+        popup.editTitle = "Edit Job Title";
+        return popup;
+    })(popup || {});
+</script>
+<script type="text/javascript">
+    var popup = (function (popup) {
+        var event;
+
+        var windowOptions = {
+            modal: true,
+            maxWidth: popup.width,
+            width: $(window).width() * 9 / 10,
+            maxHeight: $(window).height() * 9 / 10,
+            visible: false,
+            refresh: function () { this.center(); },
+            close: function (e) { $(this.element).empty(); },
+            animation: {
+                open: { effects: "slideIn:down fadeIn", duration: 350 },
+                close: { effects: "slideIn:up fadeIn", reverse: true, duration: 200 }
+            }
+        };
+
+        popup.getWindowOptions = function () {
+            return windowOptions;
+        };
+
+        popup.addNewClick = function (e) {
+            e.preventDefault();
+            $(".k-window-title").html(popup.createTitle);
+            $("#addEditWindow")
+                .data("kendoWindow")
+                .refresh({
+                    url: popup.createUrl
+                })
+                .center()
+                .open();
+
+            event = e;
+        };
+
+        popup.GetDescClick = function (e) {
+            e.preventDefault();
+            $(".k-window-title").html(popup.createTitle);
+            $("#addEditWindow")
+                .data("kendoWindow")
+                .refresh({
+                    url: popup.GetDataDescription
+                })
+                .center()
+                .open();
+
+            event = e;
+        };
+        return popup;
+
+    })(popup || {});
+
+    $(function () {
+        $("#addEditWindow").kendoWindow(popup.getWindowOptions());
+
+        $("#btnAddNew").click(popup.GetDescClick);
+        $("#btnDelete").click(popup.deleteClick);
+        $("#btnContinueDelete").click(popup.continueDeleteClick);
+        $("#grid").on("click", ".editRow", popup.editClick);
+    });
+</script>
+<script>
+
+    function getCategory()
+    {
+        var selected_val = $('#JobLevelID').val();
+
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("GetLevelCategory", "JobTitle")",
+            data: { levelID: selected_val },
+            success: function (result)
+            {
+                $("#JobLevelCategoryID").val(result.Value)
+                $("#JobLevelCategory").val(result.Text)
+            },
+            error: function (err)
+            {
+                swal({
+                    title: "Error",
+                    text: err.statusText,
+                    type: "error",
+                    html: true
+                });
+            }
+        });
+    }
+
+    function startChange()
+    {
+        //var endPicker = $("#LastEff").data("kendoDatePicker"),
+        //    startDate = this.value();
+        var endPicker = $("#LastEff").data("datepicker"),
+            startDate = this.value();
+
+        if (startDate)
+        {
+            startDate = new Date(startDate);
+            startDate.setDate(startDate.getDate());
+            endPicker.min(startDate);
+        }
+    }
+
+    function endChange()
+    {
+        //var startPicker = $("#BeginEff").data("kendoDatePicker"),
+        //    endDate = this.value();
+        var startPicker = $("#BeginEff").data("datepicker"),
+            endDate = this.value();
+
+        if (endDate)
+        {
+            endDate = new Date(endDate);
+            endDate.setDate(endDate.getDate());
+            startPicker.max(endDate);
+        }
+    }
+</script>

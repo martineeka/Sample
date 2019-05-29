@@ -1,0 +1,332 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+    display: inline-block;
+
+    &:hover {
+        // color: black;
+        text-decoration: none;
+    }
+}
+
+ul, ol {
+    padding: 0;
+    margin: 0;
+
+    li {list-style-type: none;}
+}
+
+.collapsible-target {
+    display: none;
+    li.side-nav-item a {padding-left: 25px;}
+}
+
+.hide-nav {
+    width: 0!important;
+}
+
+.show-nav {
+    width: 250px!important;
+}
+
+.remove-margin {
+    margin-left: 0!important;
+}
+
+h1 {font-size: 20px; font-weight: 600; margin-bottom: 5px;}
+h2 {font-size: 18px; font-weight: 600; margin-bottom: 5px;}
+h3 {font-size: 14px; font-weight: 600; margin-bottom: 5px;}
+h4 {font-size: 13px; font-weight: 600; margin-bottom: 5px;}
+h5 {font-size: 12.5px; font-weight: 600; margin-bottom: 5px;}
+h6 {font-size: 12px; font-weight: 600; margin-bottom: 5px;}
+p {font-size: 12px; margin-bottom: 0;}
+
+div.content-wrapper {
+    background-color: white;
+    margin-bottom: 10px;
+    padding: 10px;
+    box-shadow: 0 1px 3px lightgrey;
+}
+
+.breadcrumb li {
+    font-size: 12px;
+}
+
+.form-control:focus {
+    border-color: rgba($color: $custom-color, $alpha: .6);
+    box-shadow: 0 0 0 0.2rem rgba($color: $custom-color, $alpha: .4);
+    color: $deep-grey;
+}
+
+.form-group {
+    margin-bottom: 5px;
+    
+    label {
+        font-size: 12px;
+        margin-bottom: 0;
+    }
+}
+
+.custom-control-label > span {
+    display: inline-block;
+    margin-top: 3px;
+}
+
+span.thumb {
+    display: none;
+}
+
+.custom-range {
+    -webkit-appearance: none;
+}
+
+.dataTables_length, .dataTables_filter, .dataTables_info, .dataTables_paginate {
+    font-size: 12px;
+
+    label {
+        margin-bottom: 0;
+    }
+
+    .page-link {
+        padding: 0 10px;
+        font-size: 12px!important;
+    }
+}
+
+.custom-select {
+    font-size: 12px;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.custom-file-label {
+    height: auto;
+}
+
+.modal.datepicker-modal, .modal.timepicker-modal {
+    height: auto;
+    background-color: transparent;
+}
+
+.btn-flat {
+    background-color: transparent;
+    border: none;
+}
+
+.timepicker-span-hours.text-primary, .timepicker-span-minutes.text-primary {
+    color: white!important;
+}
+
+.timepicker-span-am-pm .text-primary {
+    color: white!important;
+}
+
+select {
+    border-radius: 0;
+}
+
+.pagination li.active {
+    background-color: transparent;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    border: none;
+    background: transparent;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+.modal {
+    background-color: transparent;
+    box-shadow: none;
+
+    .modal-header {
+        padding: 10px;
+        background-color: $custom-color;
+        color: white;
+
+        h4 {font-size: 18px;}
+    }
+
+    .modal-content {
+        padding: 0;
+    }
+
+    .modal-body {
+        padding: 10px;
+    }
+
+    .modal-footer {
+        padding: 10px;
+    }
+
+    .close {
+        opacity: 1;
+        color: white;
+
+        &:hover {color: $light-grey;}
+        &:focus {outline: none;}
+    }
+}
+
+.pagination li a {
+    font-size: 12px;
+}
+
+button.btn, input[type=submit].btn {
+    font-size: 12px;
+}
+
+.breadcrumb:before {
+    display: none;
+}
+
+ul.head-nav-items {
+    .dropdown-toggle::after {
+        display: none;
+    }
+
+    .dropdown-menu {
+        padding: 0;
+        margin: 0;
+        min-width: 240px;
+    }
+
+    .dropdown-menu.show {
+        // transform: translate3d(-120px, 43px, 0px)!important;
+        top: 13px!important;
+        box-shadow: 0px 2px 10px 1px grey;
+        border: none!important;
+    }
+
+    div.dd-header {
+        padding: 10px;
+        background-color: $custom-color;
+        color: white;
+    }
+
+    div.dd-footer {
+        a {
+            display: inline-block;
+            width: 100%;
+            padding: 5px 10px;
+            background-color: $custom-color;
+            color: white;
+            text-align: center
+        }
+    }
+
+    div.dd-item {
+        &>a {
+            display: flex;
+            flex-direction: column;
+            padding: 5px 10px;
+            font-size: 14px;
+
+            &:hover {
+                background-color: $light-grey;
+            }
+        }
+
+        span.up-time {
+            font-size: 10px;
+            text-align: right;
+        }
+
+        span.top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        span.notif-counter {
+            @extend %perfect-center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: $custom-color;
+            color: white;
+            font-size: 11px;
+        }
+    }
+}
+
+table .dropdown-toggle::after {
+    margin-left: 0;
+}
+
+table.dataTable tr td:first-child {
+    display: flex;
+    justify-content: space-around;
+
+    .btn {
+        padding: 0 8px;
+    }
+
+    .dropdown-menu {
+        background-color: rgba($color: $custom-color, $alpha: .8);
+        margin-left: 5px;
+    }
+
+    .dropdown-item {
+        color: white;
+        padding: 5px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+
+        i {font-size: 12px;}
+        span {margin-left: 5px;}
+    }
+
+    .dropdown-item:hover, .dropdown-item:focus {
+        background-color: rgba($color: $custom-color, $alpha: 1);
+    }
+
+    button.dd-btn {background-color: $custom-color; color: white;}
+}
+
+.alert {margin-bottom: 5px;}
+
+.alert-dismissible .close {
+    padding: 10px;
+}
+
+.chart.Treant {
+    // width: 768px;
+    overflow: auto;
+}
+
+div.orgChart {
+    tr {
+        border-bottom: none;
+    }
+
+    .node h2 {
+        font-size: 12px;
+    }
+
+    .right {
+        float: none!important;
+    }
+
+    .left {
+        float: none!important;
+    }
+
+    td, th {
+        border-radius: 0;
+    }
+}
+
+// #create_pdf {
+//     background-color: yellowgreen;
+// }

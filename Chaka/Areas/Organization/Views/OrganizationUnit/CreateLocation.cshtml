@@ -1,0 +1,65 @@
+﻿@model Chaka.ViewModels.Organization.OrgUnit.CreateEditLocationViewModel
+
+@using Kendo.Mvc.UI
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addEditForm", name = "addEditForm" }))
+{
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.OrganizationID)
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.LocationID)</div>
+            <div class="col-md-8">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+
+                @(Html.Kendo().DropDownListFor(x => x.LocationID)
+                          .HtmlAttributes(new { style = "width:390px", @class = "form-control" })
+                          .OptionLabel("Select Job Title...")
+                          .DataTextField("Text")
+                          .DataValueField("Value").Filter(FilterType.Contains)
+                          .DataSource(source =>
+                          {
+                                source.Read(read =>
+                                {
+                                    read.Action("GetDropDownLocation", "OrganizationUnit");
+                                });
+                          })
+                )
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.ValidFrom) </div>
+            <div class="col-md-8">
+                <i class="required-field fa fa-asterisk"></i>
+                @Html.Kendo().DatePickerFor(m => m.ValidFrom).Max(Model.ValidTo.HasValue ? Model.ValidTo.Value : DateTime.MaxValue).HtmlAttributes(new { type = "text", placeholder = "Select date" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.ValidTo) </div>
+            <div class="col-md-7">
+                <i class="required-field"></i>
+                @Html.Kendo().DatePickerFor(m => m.ValidTo).Min(Model.ValidFrom.Value).HtmlAttributes(new { type = "text", placeholder = "Select date" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2"></div>
+            <div class="col-md-7">
+                <button type="submit" id="btnSave" name="btnSave" class="btn btn-primary">Save</button>
+                <button type="button" id="btnClose" name="btnClose" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $("#btnClose").click(popup.closeClick);
+        $("#btnSave").click(popup.saveClick);
+    });
+
+     $(function () {
+        $("span.clearDateTimePickerPopUp").click(function () { datePicker_clearValue(this) });
+    });
+
+</script>

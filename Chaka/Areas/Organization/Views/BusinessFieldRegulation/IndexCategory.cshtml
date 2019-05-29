@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewData["Title"] = "Business Field Category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Kendo.Mvc.UI
+@using Chaka.Utilities
+@model Chaka.ViewModels.Organization.BusinessFieldRegulation.IndexBusinessFieldRegulationViewModel
+
+<div class="head-section content-padding">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">General</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Business Field Regulation</li>
+            <li class="breadcrumb-item active" aria-current="page">Category</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+                @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "general-table-form" }))
+                {
+                    @Html.ListBox("list-all-item", new List<SelectListItem>())
+                    @Html.ListBox("list-check", new List<SelectListItem>())
+
+                    <div class="btn-group" style="margin-bottom:15px">
+                        <a href="@Url.Action("Index","BusinessFieldRegulation")" class="btn btn-primary" style="font-size:12px;"><i class="fa fa-plus"></i> Back</a>
+                        <a href="javascript:;" data-id="@Model.ID" class="btn btn-success" id="btnAddNewDetail" style="font-size:12px;"><i class="fa fa-plus"></i> Add New</a>
+                        <button type="submit" class="btn btn-danger" id="btnDelete" name="btnDelete"><i class="fa fa-minus"></i> Delete</button>
+                    </div>
+
+                    <table class="table table-striped">
+                        <tr>
+                            <td width="20%"><b>Regulation Name</b></td>
+                            <td>@Model.Name</td>
+                        </tr>
+
+                        <tr>
+                            <td><b>Is Active</b></td>
+                            @if (Model.IsActive)
+                            {
+                                <td>Active</td>
+                            }
+                            else
+                            {
+                                <td>Not Active</td>
+                            }
+
+                        </tr>
+
+                    </table>
+
+                    @(Html.Kendo().Grid<Chaka.ViewModels.Organization.BusinessFieldRegulation.ListBusinessFieldCategoryViewModel>
+                           ()
+                           .Name("grid")
+                           .Columns(col =>
+                           {
+                               col.Bound("").ClientHeaderTemplate(@"<input type='checkbox' id='chkAll' onclick='checkAll()'/>")
+                              .ClientTemplate(@"<input type='checkbox' class='Check' name='chkDelete' value='#=ID#' data-id='#=ID#' />")
+                              .Width(50).HtmlAttributes(new { Class = "check-box-column" });
+                               col.Bound(p => p.Code).Title("Code");
+                               col.Bound(p => p.Name).Title("Name");
+                               col.Bound(p => p.Description).Title("Description");
+                               col.Bound(p => p.IsActive).Title("Active");
+                               col.Bound("").ClientTemplate("<a data-id='#=ID#' href='javascript:;' class='btn btn-success  editRow'>Edit</a>" +
+                                   "<a data-id='#=ID#' href='" + Url.Action("IndexClassification", "BusinessFieldRegulation", new { BusinessFieldCategoryID = "#=ID#", BusinessFieldRegulationID = EncryptionHelper.EncryptUrlParam(Model.ID) }) + "' class='btn btn-warning'> Classification</a>").Width(100).Title("").Filterable(false);
+                               
+                           })
+                                 .PersistSelection()
+                                 .Pageable()
+                                 .Sortable()
+                                 .Filterable()
+                                 .DataSource(dataSource => dataSource
+                                 .Ajax()
+                                 .Read(read => read.Action("ListCategory", "BusinessFieldRegulation", new { area = "Organization", BusinessFieldRegulationID = Model.ID }))
+                                 )
+                    )
+                }
+            </div>
+        </div>
+        <div id="addEditWindow"></div>
+    </div>
+</div>
+
+<script>
+    var popup = (function (popup) {
+        popup.width = 600;
+        popup.height = 300;
+        popup.createUrl = "@Url.Action("CreateCategory")";
+        popup.createDetailUrl = "@Url.Action("CreateCategory")";
+        popup.editUrl = "@Url.Action("EditCategory")";
+        popup.deleteUrl = "@Url.Action("DeleteCategory")";
+        popup.createTitle = "Add Business Field Category";
+        popup.editTitle = "Edit Business Field Category";
+        return popup;
+    })(popup || {});
+</script>
+<script src="~/js/modules/pop-up.js"></script>
+

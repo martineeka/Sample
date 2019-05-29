@@ -1,0 +1,63 @@
+﻿@model Chaka.ViewModels.Organization.BusinessFieldRegulation.CreateEditViewModel
+
+@using Kendo.Mvc.UI
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addEditForm", name = "addEditForm" }))
+{
+    @Html.HiddenFor(m => m.ID)
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Code) </div>
+            <div class="col-md-8">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                <input type="text" name="Code" class="form-control" value="@(Model.Code)" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Name) </div>
+            <div class="col-md-8">
+                <input type="text" name="Name" class="form-control" value="@(Model.Name)" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Description) </div>
+            <div class="col-md-8">
+                <textarea class="form-control" name="Description" id="Description">@Model.Description</textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.AppointedDate)</div>
+            <div class="col-md-8">
+                @Html.Kendo().DatePickerFor(m => m.AppointedDate).Value(@Model.AppointedDate.ToString() == "1/1/0001 12:00:00 AM" || Model.AppointedDate.ToString() == "01/01/0001 00:00:00" ? DateTime.Today : @Model.AppointedDate).HtmlAttributes(new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.IsActive) </div>
+            <div class="col-md-8">
+                @Html.Kendo().CheckBoxFor(m => m.IsActive)
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <button type="submit" id="btnSave" name="btnSave" class="btn btn-primary">Save</button>
+                <button type="button" id="btnClose" name="btnClose" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $("#btnClose").click(popup.closeClick);
+        $("#btnSave").click(popup.saveClick);
+    });
+
+
+</script>

@@ -1,0 +1,288 @@
+// sass --watch styles.scss:styles.css
+
+@import "_resources";
+@import "_fonts";
+
+@import "materialize/_variables";
+@import "materialize/_global";
+@import "materialize/_dropdown";
+@import "materialize/_select";
+@import "materialize/_modal";
+@import "materialize/_datepicker";
+@import "materialize/_timepicker";
+
+@import "bootstrap/bootstrap";
+@import "_override";
+
+%perfect-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+// HEADER 
+div.header-container {
+    display: flex;
+    height: 60px;
+    box-shadow: 0 1px 6px $deep-grey;
+    position: fixed;
+    z-index: 3;
+    width: 100%;
+    background-color: white;
+    top: 0;
+}
+
+div.title-container {
+    display: flex;
+    align-items: center;
+    background-color: rgba($color: $custom-color, $alpha: .7);
+    width: 250px;
+}
+
+div.logo-section {
+    width: 50px;
+    @extend %perfect-center;
+}
+
+div.text-section {
+    h1 {
+        margin-bottom: 0;
+        font-size: 32px;
+        a {color: $light-grey;}
+    }
+}
+
+div.head-nav-container {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+    padding: 15px;
+}
+
+div.left-section {
+    flex-basis: 75%;
+}
+
+div.right-section {
+    flex-basis: 25%;
+}
+
+ul.head-nav-items {
+    display: flex;
+    justify-content: space-between;
+}
+
+// ASIDE
+div.side-nav-container {
+    background-color: $custom-color;
+    position: fixed;
+    width: 250px;
+    transition: all .3s;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 2;
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar {
+        width: 5px;
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $grey;
+    }
+}
+
+ul.side-nav-wrapper {
+    padding-top: 2px;
+    padding-bottom: 25px;
+}
+
+li.side-nav-item {
+    a {
+        color: white;
+        width: 250px;
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        font-size: 14px;
+        border-bottom: solid 1px lightgrey;
+        transition: all .3s;
+
+        i:nth-of-type(1) {
+            margin-right: 5px;
+            font-size: 17px;
+        }
+
+        i:nth-of-type(2) {
+            position: absolute;
+            right: 5px;
+            font-size: 16px;
+        }
+
+        &:hover {
+            background-color: rgba($color: $grey, $alpha: .4);
+        }
+    }
+}
+
+// MAIN
+div.body-container {
+    margin-top: 60px;
+    display: flex;
+}
+
+div.main-container {
+    flex-grow: 1;
+    margin-left: 250px;
+    transition: all .3s;
+}
+
+div.head-section {
+    margin-top: 10px;
+}
+
+div.body-section {
+    padding-top: 10px;
+}
+
+div.action-buttons {
+    display: flex;
+    a {
+        background-color: $custom-color;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        color: white;
+        margin-right: 5px;
+        transition: all .2s;
+        @extend %perfect-center;
+
+        i {font-size: 14px;}
+
+        &:hover {
+            background-color: rgba($color: $custom-color, $alpha: .8);
+        }
+    }
+}
+
+// FOOTER
+
+// LOGIN & REGISTER
+
+div.auth-box {
+    width: 320px;
+    box-shadow: 0px 2px 2px lightgrey;
+}
+
+div.auth-box-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 50px 0;
+
+    button.btn-auth {
+        border: none;
+        padding: 7px;
+        width: 100%;
+        color: white;
+        font-weight: bold;
+        letter-spacing: 1px;
+        transition: all .1s;
+        background-color: $custom-color;
+
+        &:hover {
+            background-color: rgba($color: $custom-color, $alpha: .8);
+            border-radius: 15px;
+        }
+    }
+}
+
+div.auth-header {
+    h1 {
+        font-weight: bolder;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+}
+
+div.auth-body {
+    margin: 30px 0;
+    width: 250px;
+}
+
+div.auth-footer {
+    p {font-size: 14px;}
+}
+
+div.notifications-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+div.notifications-card {
+    flex-basis: 25%;
+    background-color: $light-grey;
+    padding: 10px 5px;
+
+    div.card-wrapper {
+        background-color: white;
+        box-shadow: 0 0 5px grey;
+    }
+
+
+    div.head-sect {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        padding: 5px;
+    }
+
+    div.head-sect.approve {background-color: $light-green;}
+    div.head-sect.pending {background-color: $orange;}
+    div.head-sect.reject {background-color: $deep-orange;}
+    div.head-sect.failed {background-color: $red;}
+    div.head-sect.reminder {background-color: $deep-purple;}
+
+    span.title-section {
+        font-size: 14px;
+    }
+
+    span.right-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: black;
+
+        span, i {font-size: 12px;}
+
+        span, a {
+            @extend %perfect-center;
+            width: 25px; height: 25px;
+            background-color: white;
+            margin-left: 5px;
+            transition: all .2s;
+        }
+
+        a:hover {
+            border-radius: 50%;
+        }
+    }
+
+    div.body-sect {
+        padding: 5px;
+        overflow-y: auto;
+
+        .alert {
+            border-left: solid 3px $grey;
+        }
+    }
+}
+
+@import "_responsive";

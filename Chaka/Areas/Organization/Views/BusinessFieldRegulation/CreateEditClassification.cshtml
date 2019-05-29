@@ -1,0 +1,142 @@
+﻿@model Chaka.ViewModels.Organization.BusinessFieldRegulation.CreateEditClassificationViewModel
+
+@using Kendo.Mvc.UI
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addEditForm", name = "addEditForm" }))
+{
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.BusinessFieldCategoryID)
+    @*@Html.HiddenFor(m => m.MaxSequenceLevel)*@
+    <div class="form-horizontal">
+        <fieldset>
+            <legend>Main Section</legend>
+
+            <div class="col-md-5">
+                <div class="form-group">
+                    <div class="col-md-2">Code </div>
+                    <div class="col-md-7">
+                        <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                        @Html.Kendo().TextBoxFor(m => m.MainSectionCode).HtmlAttributes(new { @class = "form-control" })
+                        @*<input type="text" name="MainSectionCode" class="form-control" value="@(Model.MainSectionCode)" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">*@
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <div class="col-md-2">Name</div>
+                    <div class="col-md-7">
+                        <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                        @Html.Kendo().TextBoxFor(m => m.MainSectionName).HtmlAttributes(new { @class = "form-control" })
+                        @*<input type="text" name="MainSectionName" class="form-control" value="@(Model.MainSectionName)" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">*@
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Section</legend>
+
+            <div class="col-md-5">
+                <div class="form-group">
+                    <div class="col-md-2">Code </div>
+                    <div class="col-md-7">
+                        <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                        @Html.Kendo().TextBoxFor(m => m.SectionCode).HtmlAttributes(new { @class = "form-control" })
+                        @*<input type="text" name="MainSectionCode" class="form-control" value="@(Model.MainSectionCode)" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">*@
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <div class="col-md-2">Name</div>
+                    <div class="col-md-7">
+                        <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                        @Html.Kendo().TextBoxFor(m => m.SectionName).HtmlAttributes(new { @class = "form-control" })
+                        @*<input type="text" name="MainSectionName" class="form-control" value="@(Model.MainSectionName)" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">*@
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Sub Section</legend>
+
+            <div class="col-md-5">
+                <div class="form-group">
+                    <div class="col-md-2">Code </div>
+                    <div class="col-md-7">
+                        <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                        @Html.Kendo().TextBoxFor(m => m.SubSectionCode).HtmlAttributes(new { @class = "form-control" })
+                        @*<input type="text" name="MainSectionCode" class="form-control" value="@(Model.MainSectionCode)" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">*@
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <div class="col-md-2">Name</div>
+                    <div class="col-md-7">
+                        <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                        @Html.Kendo().TextBoxFor(m => m.SubSectionName).HtmlAttributes(new { @class = "form-control" })
+                        @*<input type="text" name="MainSectionName" class="form-control" value="@(Model.MainSectionName)" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">*@
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Group</legend>
+
+            <div class="col-md-5">
+                <div class="form-group">
+                    <div class="col-md-2">Code </div>
+                    <div class="col-md-7">
+                        <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                        @Html.Kendo().TextBoxFor(m => m.GroupCode).HtmlAttributes(new { @class = "form-control" })
+                        @*<input type="text" name="MainSectionCode" class="form-control" value="@(Model.MainSectionCode)" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">*@
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <div class="col-md-2">Name</div>
+                    <div class="col-md-7">
+                        <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                        @Html.Kendo().TextBoxFor(m => m.GroupName).HtmlAttributes(new { @class = "form-control" })
+                        @*<input type="text" name="MainSectionName" class="form-control" value="@(Model.MainSectionName)" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">*@
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <hr />
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Description) </div>
+            <div class="col-md-8">
+                <textarea class="form-control" name="Description" id="Description">@Model.Description</textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.IsActive) </div>
+            <div class="col-md-8">
+                @Html.Kendo().CheckBoxFor(m => m.IsActive)
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <button type="submit" id="btnSave" name="btnSave" class="btn btn-primary">Save</button>
+                <button type="button" id="btnClose" name="btnClose" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $("#btnClose").click(popup.closeClick);
+        $("#btnSave").click(popup.saveClick);
+    });
+
+
+</script>

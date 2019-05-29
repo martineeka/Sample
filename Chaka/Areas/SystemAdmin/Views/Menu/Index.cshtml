@@ -1,0 +1,185 @@
+﻿@{
+    ViewData["Title"] = "Menu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+
+
+@*<script type="text/javascript">
+    var deleteClick = function (e) {
+        e.preventDefault();
+        console.log("test")
+        var data = [];
+        var selectedRow = $(e.currentTarget.parentElement.parentElement).find("#list-check > option");
+        if (selectedRow.length > 0) {
+            selectedRow.each(function () {
+                data.push($(this).val());
+            });
+        } else {
+            selectedRow = $("input[name='chkDelete']:checked");
+            selectedRow.each(function () {
+                data.push($(this).val());
+            });
+        }
+
+        if (data.length > 0) {
+            var length = data.length;
+            var allItemLength = $(e.currentTarget.parentElement.parentElement).find("#list-all-item > option").length;
+            var rowText = length === 1 ? " row" : " rows";
+            if (length === allItemLength) {
+                length = "all";
+                rowText = " rows";
+            }
+            var text = "You have selected <b>" + length + rowText + "</b> for deletion<br>WARNING: This operation cannot be undone!";
+            swal({
+                title: "Are you sure?",
+                text: text,
+                showCancelButton: true,
+                confirmButtonColor: "#c0392b",
+                confirmButtonText: "Yes, delete it!",
+                imageUrl: "/Content/Images/delete.png",
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true,
+                html: true
+            },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        e.preventDefault();
+
+                        $("#btnDelete").disableBtn();
+                        $.ajax({
+                            type: "POST",
+                            url: popup.deleteUrl,
+                            data: {
+                                arrayOfID: data
+                            },
+                            traditional: true,
+                            success: function (result) {
+                                $("#btnDelete").enableBtn();
+                                if (result.Message != null) {
+                                    if (result.IsSuccess) {
+                                        Chaka.setEvent(e);
+                                        Chaka.refreshGrid();
+                                        if ($("#grid-registered").length) {
+                                            Chaka.refreshGrid("grid-registered");
+                                        }
+                                        if ($("#grid-unregistered").length) {
+                                            Chaka.refreshGrid("grid-unregistered");
+                                        }
+                                        swal(result.Message, "Click ok to proceed", "success");
+                                    } else {
+                                        $("#btnDelete").enableBtn();
+                                        swal({
+                                            title: "Something Wrong",
+                                            text: result.Message,
+                                            type: "error"
+                                        });
+                                    }
+                                }
+                            },
+                            error: function (result) {
+                                $("#btnDelete").enableBtn();
+                                swal({
+                                    title: "Error",
+                                    text: result.Message,
+                                    type: "error"
+                                });
+                            }
+                        });
+                    }
+                });
+        } else {
+            swal({
+                title: "Failed",
+                text: "There was an error running your action. Please select one or more items!",
+                type: "error"
+            });
+        }
+    };
+
+    function checkAll() {
+        if ($('#chkAll').is(":checked")) {
+            var checkboxes = document.getElementsByName("chkDelete");
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                checkboxes[i].checked = true;
+            }
+        } else {
+            var checkboxes = document.getElementsByName("chkDelete");
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                checkboxes[i].checked = false;
+            }
+        }
+
+    }
+    $(function () {
+        $("#btnDelete").click(deleteClick);
+    })
+</script>*@
+
+<div class="head-section content-padding">
+    <h2 class="page-title">Menu</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">System Admin</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Menu</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+                @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "general-table-form" }))
+                {
+                    @Html.ListBox("list-all-item", new List<SelectListItem>())
+                    @Html.ListBox("list-check", new List<SelectListItem>())
+
+                    <div class="btn-group">
+                        <a href="javascript:;" class="btn btn-primary" id="btnAddNew" style="font-size:12px;"><i class="fa fa-plus"></i> Add New</a>
+                        <button type="submit" class="btn btn-primary" id="btnDelete" name="btnDelete"><i class="fa fa-minus"></i> Delete</button>
+                    </div>
+                    @(Html.Kendo().Grid<Chaka.ViewModels.SystemAdmin.Menu.ListMenuViewModel>()
+                        .Name("grid")
+                        .Columns(col =>
+                        {
+                            col.Bound("").ClientHeaderTemplate(@"<input type='checkbox' id='chkAll' onclick='checkAll()'/>")
+                            .ClientTemplate(@"<input type='checkbox' class='Check' name='chkDelete' value='#=ID#' data-id='#=ID#' />")
+                            .Width(50).HtmlAttributes(new { Class = "check-box-column" });
+
+                            col.Bound("").ClientTemplate("<a data-id='#=ID#' href='javascript:;' class='btn btn-primary  editRow'>Edit</a>"+"&nbsp;<a data-id='#=ID#' href='" + Url.Action("IndexFunction", new { menuID = "#=ID#" }) + "' class='btn btn-primary'>Function</a>").Width(150).Title("").Filterable(false);
+                            //col.Bound("").ClientTemplate(@)
+                            //.Width(140).Title("").HtmlAttributes(new { Class = "button-column" });
+                            col.Bound(p => p.NameINA);
+                            col.Bound(p => p.NameENG);
+                            col.Bound(p => p.Description);
+                        })
+                        .PersistSelection()
+                        .Pageable()
+                        .Sortable()
+                        .Filterable()
+                        .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Read(read => read.Action("List", "Menu", new { area = "SystemAdmin" }))
+                        )
+                    )
+                }
+            </div>
+        </div>
+        <div id="addEditWindow"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var popup = (function (popup) {
+        popup.width = 600;
+        popup.createUrl = "@Url.Action("Create")";
+        popup.editUrl = "@Url.Action("Edit")";
+        popup.deleteUrl = "@Url.Action("Delete")";
+        popup.createTitle = "Add Menu";
+        popup.editTitle = "Edit Menu";
+        return popup;
+    })(popup || {});
+    
+</script>
+<script src="~/js/modules/pop-up.js"></script>

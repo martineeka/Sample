@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "IndexLog";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using Kendo.Mvc.UI
+@model Chaka.ViewModels.Organization.OrganizationReport.IndexLogViewModel
+
+<div class="head-section content-padding">
+    <h2 class="page-title">Organization Report - Log Change</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Organization</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Organization Report - Log Change</li>
+        </ol>
+    </nav>
+</div>
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+                @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addEditForm", name = "addEditForm" }))
+                {
+                    <div class="form-horizontal">
+
+                        <div class="form-group">
+                            <div class="col-md-2">@Html.LabelFor(m => m.StartDate) </div>
+                            <div class="col-md-8">
+                                <i class="required-field fa fa-asterisk"></i>
+                                @Html.Kendo().DatePickerFor(m => m.StartDate).Max(Model.EndDate.HasValue ? Model.EndDate.Value : DateTime.MaxValue).HtmlAttributes(new { type = "text", placeholder = "Select date" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2">@Html.LabelFor(m => m.EndDate) </div>
+                            <div class="col-md-8">
+                                <i class="required-field"></i>
+                                @Html.Kendo().DatePickerFor(m => m.EndDate).Min(Model.StartDate.Value).HtmlAttributes(new { type = "text", placeholder = "Select date" })
+                                <span title="Clear Date" class="clearDateTimePickerPopUp"><i class="fa fa-times-circle"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8">
+                                <button type="button" id="btnShow" name="btnShow" class="btn btn-primary btnShow">Show</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#btnShow").click(function (e) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("ParseParamLog", "OrganizationReport")",
+            data: $("#addEditForm").serialize(),
+            success: function (result) {
+             var urlHierarchy = "@Url.Action("OrgLogChange", "OrganizationReport")";
+             window.location.href = urlHierarchy + "?startDate=" + result.StartDate + "&endDate=" + result.EndDate ;
+            },
+            error: function (err) {
+                window.location.href = "@Url.Action("IndexLog", "OrganizationReport")";
+            }
+        });
+    });
+</script>
+

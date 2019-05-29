@@ -1,0 +1,250 @@
+﻿@model Chaka.ViewModels.SystemAdmin.User.CreateEditViewModel
+
+@using Kendo.Mvc.UI
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addEditForm", name = "addEditForm" }))
+{
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.LoginName)
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <div class="col-md-3">@Html.LabelFor(m => m.UserName) </div>
+            <div class="col-md-7">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                @Html.Kendo().TextBoxFor(m => m.UserName).HtmlAttributes(new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">@Html.LabelFor(m => m.Email) </div>
+            <div class="col-md-7">
+                @Html.Kendo().TextBoxFor(m => m.Email).HtmlAttributes(new { @class = "form-control" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            <div class="col-md-3">@Html.LabelFor(m => m.EmployeeID)</div>
+            <div class="col-md-7">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                @(Html.Kendo().DropDownListFor(x => x.EmployeeID)
+                          .HtmlAttributes(new { @class = "form-control" })
+                          .OptionLabel("Select Employee...")
+                      .DataTextField("Text")
+                      .DataValueField("Value").Filter(FilterType.Contains)
+                      .DataSource(source =>
+                      {
+                            source.Read(read =>
+                            {
+                                read.Action("GetEmployee", "User");
+                            });
+                      })
+                )
+            </div>
+        </div>*@
+        <div class="form-group">
+            <label class="col-md-3">@Html.LabelFor(m => m.Employee)</label>
+            <div class="col-md-7">
+                <i class="required-field fa fa-asterisk IsSpecificEmployee_validation"></i>
+                <div class="input-group">
+                    <input type="hidden" id="EmployeeID" name="EmployeeID" class="parameters" value="@Model.EmployeeID" />
+                    @Html.Kendo().TextBoxFor(x => x.NIK).HtmlAttributes(new { @class = "form-control hover-to-readonly" })
+                    <div class="input-group-addon">
+                        <a id="btnSearch" class="k-icon k-i-search search-icon-fix" href="#"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3"></label>
+            <div class="col-md-7">
+                <i class="required-field fa fa-asterisk IsSpecificEmployee_validation"></i>
+                <div class="input-group">
+                    @Html.Kendo().TextBoxFor(x => x.Employee).HtmlAttributes(new { @class = "form-control hover-to-readonly" })
+                </div>
+            </div>
+        </div>
+        @if (Model.action == "create")
+        {
+            <div class="form-group">
+                <div class="col-md-3">@Html.LabelFor(m => m.Password) </div>
+                <div class="col-md-7">
+                    @Html.Kendo().TextBoxFor(m => m.Password).HtmlAttributes(new { @class = "form-control", type = "password" })
+                </div>
+            </div>
+        }
+        else
+        {
+            @Html.HiddenFor(m => m.Password)
+        }
+        <div class="form-group">
+            <div class="col-md-3">@Html.LabelFor(m => m.EmployeeListFilterID)</div>
+            <div class="col-md-7">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                @(Html.Kendo().DropDownListFor(x => x.EmployeeListFilterID)
+                          .HtmlAttributes(new { @class = "form-control" })
+                          .OptionLabel("Select Filter...")
+                      .DataTextField("Text")
+                      .DataValueField("Value").Filter(FilterType.Contains)
+                      .DataSource(source =>
+                      {
+                            source.Read(read =>
+                            {
+                                read.Action("GetEmployeeListFilter", "User");
+                            });
+                      })
+                )
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">@Html.LabelFor(m => m.ResponsibilityGroupID)</div>
+            <div class="col-md-7">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                @(Html.Kendo().DropDownListFor(x => x.ResponsibilityGroupID)
+                          .HtmlAttributes(new { @class = "form-control" })
+                          .OptionLabel("Select Responsibility Group...")
+                      .DataTextField("Text")
+                      .DataValueField("Value").Filter(FilterType.Contains)
+                      .DataSource(source =>
+                      {
+                            source.Read(read =>
+                            {
+                                read.Action("GetResponsibilityGroup", "User");
+                            });
+                      })
+                )
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">@Html.LabelFor(m => m.PreferenceGroupID)</div>
+            <div class="col-md-7">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                @(Html.Kendo().DropDownListFor(x => x.PreferenceGroupID)
+                          .HtmlAttributes(new { @class = "form-control" })
+                          .OptionLabel("Select Preference Group...")
+                      .DataTextField("Text")
+                      .DataValueField("Value").Filter(FilterType.Contains)
+                      .DataSource(source =>
+                      {
+                            source.Read(read =>
+                            {
+                                read.Action("GetPreferenceGroup", "User");
+                            });
+                      })
+                )
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">@Html.LabelFor(m => m.RestrictionGroupID)</div>
+            <div class="col-md-7">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                @(Html.Kendo().DropDownListFor(x => x.RestrictionGroupID)
+                          .HtmlAttributes(new { @class = "form-control" })
+                          .OptionLabel("Select Restriction Group...")
+                      .DataTextField("Text")
+                      .DataValueField("Value").Filter(FilterType.Contains)
+                      .DataSource(source =>
+                      {
+                            source.Read(read =>
+                            {
+                                read.Action("GetRestrictionGroup", "User");
+                            });
+                      })
+                )
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">@Html.LabelFor(m => m.UserStatusID)</div>
+            <div class="col-md-7">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                @(Html.Kendo().DropDownListFor(x => x.UserStatusID)
+                          .HtmlAttributes(new { @class = "form-control" })
+                          .OptionLabel("Select Status...")
+                      .DataTextField("Text")
+                      .DataValueField("Value").Filter(FilterType.Contains)
+                      .Value(Convert.ToInt32(Model.UserStatusID) > 0 ? Model.UserStatusID : "1")
+                      .DataSource(source =>
+                      {
+                            source.Read(read =>
+                            {
+                                read.Action("GetUserStatus", "User");
+                            });
+                      })
+                )
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3"></div>
+            <div class="col-md-7">
+                <button type="submit" id="btnSave" name="btnSave" class="btn btn-primary"><i class="fa fa-save"> Save</i></button>
+                <button type="button" id="btnClose" name="btnClose" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+}
+
+<div id="browseEmployee"></div>
+
+<script>
+    $(function () {
+        $("#btnClose").click(popup.closeClick);
+        $("#btnSave").click(popup.saveClick);
+    });
+
+    $(document).ready(function ()
+    {
+        $("#Employee").attr("readonly", true);
+        $("#NIK").attr("readonly", true);
+
+        //$("#BeginEff").change(startChange);
+        //$("#LastEff").change(endChange);
+    });
+
+</script>
+
+<script>
+
+
+    var windowEmployee = (function (e) {
+        return {
+            windowOptions: {
+                modal: true,
+                width: 800,
+                height: 340,
+                visible: false,
+                animation: {
+                    open: { effects: "slideIn:down fadeIn", duration: 350 },
+                    close: { effects: "slideIn:up fadeIn", reverse: true, duration: 200 }
+                },
+            }
+        };
+    })(jQuery);
+
+    $(function () {
+        //$("span.clearDateTimePickerPopUp").click(function () { datePicker_clearValue(this) });
+
+        $("#browseEmployee").kendoWindow(windowEmployee.windowOptions);
+
+        const windowBrowseEmployee = function (e)
+        {
+            e.preventDefault();
+
+            $("#browseEmployee").html(kendoWindowHelper.loadingTemplate);
+            $("#browseEmployee")
+                .data("kendoWindow")
+                .title("Browse Empployee")
+                .refresh({
+                    url:
+                        '@Url.Action("IndexEmployee", "User", new { area = "SystemAdmin", callback = "EmployeeID;NIK;Employee" })'
+                })
+                .center()
+                .open();
+        };
+
+        $("#btnSearch").click(windowBrowseEmployee);
+    });
+</script>

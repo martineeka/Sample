@@ -1,0 +1,117 @@
+﻿@model Chaka.ViewModels.Organization.JobTitle.IndexDetailViewModel
+@{
+    ViewData["Title"] = "Job Description";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+
+<div class="head-section content-padding">
+    <h2 class="page-title">Job Title - Description</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Organization</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index","JobTitle")">Job Title</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Job Description</li>
+        </ol>
+    </nav>
+</div>
+
+<style type="text/css">
+    .custombtn {
+        margin-right: 5px;
+        margin-bottom: 5px
+    }
+</style>
+
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+
+                @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "general-table-form" }))
+                {
+                    @Html.ListBox("list-all-item", new List<SelectListItem>())
+                    @Html.ListBox("list-check", new List<SelectListItem>())
+                    @Html.ValidationSummary()
+                    <table class="header-detail">
+                        <tr>
+                            <td>Job Title Code </td>
+                            <td>: @Model.JobTitleCode</td>
+                            <td></td>
+                            <td>Job Level Category </td>
+                            <td>: @Model.JobLevelCategory</td>
+                        </tr>
+                        <tr>
+                            <td>Job Title Name </td>
+                            <td>: @Model.JobTitleName</td>
+                            <td></td>
+                            <td>Description </td>
+                            <td>: @Model.Description</td>
+                        </tr>
+                        <tr>
+                            <td>Job Status </td>
+                            <td>: @Model.JobStatus</td>
+                            <td></td>
+                            <td>Begin Effective </td>
+                            <td>: @Model.BeginEff</td>
+                        </tr>
+                        <tr>
+                            <td>Job Level </td>
+                            <td>: @Model.JobLevel</td>
+                            <td></td>
+                            <td>Last Effective </td>
+                            <td>: @Model.LastEff</td>
+                        </tr>
+                    </table>
+                    
+                    <div class="btn-group">
+                        <a href="@Url.Action("Index")" class="btn btn-info custombtn"><i class="fa fa-back"></i> Back</a>
+                        <a data-id="@Model.JobTitleID" href="javascript:;" class="btn btn-success custombtn" id="btnAddNewDetail" style="font-size:12px;"><i class="fa fa-plus"></i> List Job Master</a>
+
+                    </div>
+                    @(Html.Kendo().Grid<Chaka.ViewModels.Organization.JobTitle.ListDescriptionViewModel>()
+                           .Name("gridMapping")
+                           .Columns(col =>
+                           {
+                               col.Bound(p => p.Code);
+                               col.Bound(p => p.Name);
+                               col.Bound(p => p.Description);
+                           }).PersistSelection()
+                             .Pageable()
+                             .Sortable()
+                             .Filterable(filter =>
+                                                     {
+                                                         filter.Extra(false);
+                                                         filter.Operators(op =>
+                                                         {
+                                                             op.ForString(str => str.Clear());
+                                                             op.ForString(str =>
+                                                             {
+                                                                 str.Clear().Contains("Contains");
+                                     });
+                                 });
+                             })
+                             .DataSource(dataSource => dataSource
+                             .Ajax()
+                             .Read(read => read.Action("DescriptionList", "JobTitle", new { area = "Organization", jobTitleID = Model.JobTitleID }))))
+                }
+            </div>
+        </div>
+        <div id="addEditWindow"></div>
+    </div>
+</div>
+
+<script>
+    var popup = (function (popup) {
+        popup.width = 210000;
+        popup.height = 900;
+        popup.createUrl = "@Url.Action("EditDescription")";
+        popup.createDetailUrl = "@Url.Action("EditDescription")";
+        popup.createTitle = "List Job Master";
+        return popup;
+    })(popup || {});
+
+
+</script>
+
+<script src="~/js/modules/pop-up.js"></script>

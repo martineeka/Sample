@@ -1,0 +1,118 @@
+﻿@{
+    ViewData["Title"] = "OrgUnitTreeView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #treeview-left {
+        overflow: visible;
+    }
+
+    .k-top, .k-bot, .k-mid {
+        display: inline-block;
+        z-index: 10;
+        border: 2px solid #093155;
+        background-color: #2196f3;
+        -moz-background-clip: padding;
+        -webkit-border-radius: 0.2em;
+        -moz-border-radius: 0.2em;
+        border-radius: 10px;
+        width: 170px;
+        min-height: 50px;
+        color: white;
+        font:bold 12px;
+        font-size: 15px;
+        margin-bottom: 15px;
+    }
+
+    .k-treeview .k-icon.k-i-collapse {
+        color: blue;
+    }
+
+    .k-treeview .k-icon.k-i-expand {
+        color: blue;
+    }
+
+    .k-treeview .k-i-collapse:before {
+        content: "\2212";
+    }
+
+    .k-treeview .k-i-expand:before {
+        content: "\2b";
+    }
+
+    div.root-hierarchy {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<div class="head-section content-padding">
+    <h2 class="page-title">Organization Report TreeView</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">TreeView</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Organization Report TreeView</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+                <p align="right">
+                    <button type="submit" id="btnExport" name="btnExport" class="btn btn-primary export-pdf">Export PDF</button>
+                    <button type="submit" id="btnPrint" name="btnPrint" class="btn btn-primary print-diagram">Print</button>
+                </p>
+                <div class="root-hierarchy">
+                    <div id="treeview-left" class="print"></div>
+                   
+                </div>
+
+                <p align="right">
+                    <input type="button" id="btnBack" value="BACK" name="btnBack" class="btn btn-primary float:right;" onclick="window.location='@Url.Action("Index", "OrganizationReport" )'">
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+        $(".print-diagram").click(function () {
+        var divToPrint = document.getElementById('treeview-left');
+        var newWin = window.open('', 'Print-Window');
+        newWin.document.open();
+        newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+        newWin.document.close();
+        setTimeout(function () { newWin.close(); }, 10);
+    });
+
+     $(".export-pdf").click(function() {
+        kendo.drawing.drawDOM($(".print"))
+        .then(function(group) {
+            return kendo.drawing.exportPDF(group, {
+                paperSize: "a4",
+                margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" }
+            });
+        })
+        .done(function(data) {
+            kendo.saveAs({
+                dataURI: data,
+                fileName: "Organization - Report TreeView.pdf",
+                proxyURL: "https://demos.telerik.com/kendo-ui/service/export"
+            });
+        });
+    });
+
+    var datas = @Html.Raw(ViewData["reOrgChartTreeView"]);
+    var inlineDefault = new kendo.data.HierarchicalDataSource({
+        data: datas
+         });
+
+    $("#treeview-left").kendoTreeView({
+        dataSource: inlineDefault,
+
+    });
+</script>

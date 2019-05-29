@@ -1,0 +1,149 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@using Kendo.Mvc.UI
+@model Chaka.ViewModels.SysAdmin.CreateEditViewModel
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addEditForm", name = "addEditForm" }))
+{
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.CurrentBusinessGroupID)
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-3">@Html.LabelFor(m => m.UserName)</div>
+            <div class="col-md-7">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                @Html.Kendo().TextBoxFor(m => m.UserName).HtmlAttributes(new { @readonly = "readonly" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">@Html.LabelFor(m => m.LoginName)</div>
+            <div class="col-md-7">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                @Html.Kendo().TextBoxFor(m => m.LoginName)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">@Html.LabelFor(m => m.Email)</div>
+            <div class="col-md-7">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                @Html.Kendo().TextBoxFor(m => m.Email).HtmlAttributes(new { type = "email", placeholder = "e.g. user@mydomain.com" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">@Html.LabelFor(m => m.PersonID) </div>
+            <div class="col-md-7">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                <div class="input-group">
+                    @Html.HiddenFor(x => x.PersonID)
+                    @Html.Kendo().TextBoxFor(x => x.PersonName).HtmlAttributes(new { @class = "form-control hover-to-readonly" })
+                    @Html.Kendo().TextBoxFor(x => x.PersonCode).HtmlAttributes(new { @class = "form-control hover-to-readonly" })
+                    <div class="input-group-addon">
+                        <a id="btnSearch" class="k-icon k-i-search search-icon-fix" href="#"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (string.IsNullOrEmpty(Model.ID))
+        {
+            <div class="form-group" id="PasswordField">
+                <div class="col-md-3">@Html.LabelFor(m => m.Password)</div>
+                <div class="col-md-7">
+                    <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                    @Html.TextBoxFor(m => m.Password, new { type = "password", @class = "k-textbox" })
+                </div>
+            </div>
+
+            <div class="form-group" id="ConfirmPasswordField">
+                <div class="col-md-3">@Html.LabelFor(m => m.ConfirmPassword)</div>
+                <div class="col-md-7">
+                    <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                    @Html.TextBoxFor(m => m.ConfirmPassword, new { type = "password", @class = "k-textbox" })
+                    @Html.ValidationMessageFor(model => model.ConfirmPassword)
+
+
+                </div>
+            </div>
+        }
+        else
+        {
+            @Html.HiddenFor(m => m.Password);
+        }
+        @*<div class="form-group">
+                <div class="col-md-3">@Html.LabelFor(m => m.EmployeeListFilterID)</div>
+                <div class="col-md-7">
+                    <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                    @(Html.Kendo().DropDownListFor(x => x.EmployeeListFilterID)
+                                    .OptionLabel("Select status...")
+                                    .BindTo(new SelectList(Model.EmployeeListFilterLookUp, "ID", "Name"))
+                    )
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3">@Html.LabelFor(m => m.ResponsibilityGroupID)</div>
+                <div class="col-md-7">
+                    @(Html.Kendo().DropDownListFor(x => x.ResponsibilityGroupID)
+                                    .OptionLabel("Select responsibility group...")
+                                    .BindTo(new SelectList(Model.ResponsibilityGroupLookUp, "ID", "Name"))
+                    )
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            <div class="col-md-3">@Html.LabelFor(m => m.UserStatusID)</div>
+            <div class="col-md-7">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                @(Html.Kendo().DropDownListFor(x => x.UserStatusID)
+                                            .OptionLabel("Select status...")
+                                            .DataTextField("Text")
+                                            .DataValueField("Value").Filter(FilterType.Contains)
+                                            .DataSource(source =>
+                                            {
+                                                source.Read(read =>
+                                                {
+                                                    read.Action("GetListStatus", "User", new { area = "SystemAdmin" });
+                                                });
+                                            })
+                )
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-4">
+                <button type="submit" id="btnSave" name="btnSave" class="btn btn-primary">Save</button>
+                <button type="button" id="btnClose" name="btnClose" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Modal Heading</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Modal body..
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+

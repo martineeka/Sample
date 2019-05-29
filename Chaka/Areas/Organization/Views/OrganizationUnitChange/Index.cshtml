@@ -1,0 +1,113 @@
+﻿@{
+    ViewData["Title"] = "Organization Unit Change";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+
+<div class="head-section content-padding">
+    <h2 class="page-title">Organization Unit Change</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Organization</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Organization Unit Change</li>
+        </ol>
+    </nav>
+</div>
+
+
+
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+                @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "general-table-form" }))
+                {
+                    @Html.ListBox("list-all-item", new List<SelectListItem>())
+                    @Html.ListBox("list-check", new List<SelectListItem>())
+
+                    <div class="btn-group">
+                        <a href="javascript:;" class="btn btn-primary" id="btnAddNew" style="font-size:12px;"><i class="fa fa-plus"></i> Versioning</a>
+                        @*<button type="submit" class="btn btn-primary" id="btnDelete" name="btnDelete"><i class="fa fa-minus"></i> Delete</button>*@
+                    </div>
+                    @(Html.Kendo().Grid<Chaka.ViewModels.Organization.OrgUnitChange.ListOrgUnitChangeViewModel>
+                           ()
+                           .Name("grid")
+                           .Columns(col =>
+                           {
+                               col.Bound("").ClientHeaderTemplate(@"<input type='checkbox' id='chkAll' onclick='checkAll()'/>")
+                                   .ClientTemplate(@"<input type='checkbox' class='Check' name='chkDelete' value='#=ID#' data-id='#=ID#' />")
+                                   .Width(50).HtmlAttributes(new { Class = "check-box-column" });
+                               col.Bound("").ClientTemplate("<a data-id='#=ID#' href='javascript:;' class='btn btn-primary  editRow'>Edit</a>").Width(100).Title("").Filterable(false);
+                               col.Bound("").ClientTemplate(@"<a data-id='#=ID#' href='" + Url.Action("IndexDetail", new { id = "#=ID#" }) + "' class='btn btn-primary'>Detail</a>")
+                                   .Width(140).Title("").HtmlAttributes(new { Class = "button-column" });
+                               col.Bound(p => p.TanggalRequest).Format("{0: dd MMM yyyy}");
+                               col.Bound(p => p.OrgUnit);
+                               col.Bound(p => p.StartDate).Format("{0: dd MMM yyyy}");
+                               col.Bound(p => p.EndDate).Format("{0: dd MMM yyyy}");
+                               col.Bound(p => p.Reason);
+                           }).PersistSelection()
+                             .Pageable()
+                             .Sortable()
+                             .Filterable(filter =>
+                             {
+                                 filter.Extra(false);
+                                 filter.Operators(op =>
+                                 {
+                                     op.ForString(str => str.Clear());
+                                     op.ForString(str =>
+                                     {
+                                         str.Clear().Contains("Contains");
+                                     });
+                                 });
+                             })
+                             .DataSource(dataSource => dataSource
+                             .Ajax()
+                             .Read(read => read.Action("List", "OrganizationUnitChange", new { area = "Organization" })))
+
+                             )
+                }
+            </div>
+        <div id="addEditWindow"></div>
+    </div>
+</div>
+
+<script>
+    var popup = (function (popup) {
+        popup.width = 600;
+        popup.createUrl = "@Url.Action("Create")";
+        popup.editUrl = "@Url.Action("Edit")";
+        popup.deleteUrl = "@Url.Action("Delete")";
+        popup.createTitle = "Add Job Title";
+        popup.editTitle = "Edit Job Title";
+        return popup;
+    })(popup || {});
+</script>
+<script src="~/js/modules/pop-up.js"></script>
+
+<script>
+    function startChange()
+    {
+        var endPicker = $("#LastEff").data("datepicker"),
+            startDate = this.value();
+
+        if (startDate)
+        {
+            startDate = new Date(startDate);
+            startDate.setDate(startDate.getDate());
+            endPicker.min(startDate);
+        }
+    }
+
+    function endChange()
+    {
+        var startPicker = $("#BeginEff").data("datepicker"),
+            endDate = this.value();
+
+        if (endDate)
+        {
+            endDate = new Date(endDate);
+            endDate.setDate(endDate.getDate());
+            startPicker.max(endDate);
+        }
+    }
+</script>

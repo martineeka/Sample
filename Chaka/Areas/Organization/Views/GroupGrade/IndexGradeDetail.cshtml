@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = "Grade";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+@model Chaka.ViewModels.Organization.GroupGrade.IndexGradeDetailViewModel
+
+
+<div class="head-section content-padding">
+    <h2 class="page-title">Grade</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Organization</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Grade</li>
+        </ol>
+    </nav>
+</div>
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+                @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "general-table-form" }))
+                {
+                    @Html.ListBox("list-all-item", new List<SelectListItem>())
+                    @Html.ListBox("list-check", new List<SelectListItem>())
+                <table class="header-detail">
+                    <tr>
+                        <td>@Html.LabelFor(m => m.GroupCode)</td>
+                        <td>: @Html.DisplayFor(m => m.GroupCode)</td>
+                    </tr>
+                    @*<tr>
+                        <td>@Html.LabelFor(m => m.GroupGradeID)</td>
+                        <td>: @Html.DisplayFor(m => m.Group)</td>
+                    </tr>*@
+                    <tr>
+                        <td>@Html.LabelFor(m => m.GroupName)</td>
+                        <td>: @Html.DisplayFor(m => m.GroupName)</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.LabelFor(m => m.Description)</td>
+                        <td>: @Html.DisplayFor(m => m.Description)</td>
+                    </tr>
+                </table>
+
+                <div class="btn-group">
+                    <a href="@Url.Action("Index")" class="btn btn-primary" style="font-size:12px;">Back</a>
+                    <a data-id="@Model.GroupGradeID" href="javascript:;" class="btn btn-primary" id="btnAddNewDetail" style="font-size:12px;"><i class="fa fa-plus"></i> Add New</a>
+                    <button type="submit" class="btn btn-primary" id="btnDelete" name="btnDelete"><i class="fa fa-minus"></i> Delete</button>
+                </div>
+                    @(Html.Kendo().Grid(Model.ListGrade)
+                        .Name("grid")
+                        .Columns(col =>
+                        {
+                        col.Bound("").ClientHeaderTemplate(@"<input type='checkbox' id='chkAll' onclick='checkAll()'/>")
+                        .ClientTemplate(@"<input type='checkbox' class='Check' name='chkDelete' value='#=ID#' data-id='#=ID#' />")
+                        .Width(50).HtmlAttributes(new { Class = "check-box-column" });
+
+                        col.Bound("").ClientTemplate("<a data-id='#=ID#' href='javascript:;' class='btn btn-primary  editRow'>Edit</a>").Width(100).Title("").Filterable(false);
+                        col.Bound(p => p.Code);
+                        col.Bound(p => p.Name);
+                        col.Bound(p => p.Description);
+                        col.Bound(p => p.Sequence);
+
+                        })
+                        .PersistSelection()
+                        .Pageable()
+                        .Sortable()
+                        .Filterable()
+                        .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Read(read => read.Action("ListGradeDetail", "GroupGrade", new { headerID = Model.GroupGradeID, area = "Organization" }))
+                        )
+                    )
+                }
+            </div>
+        </div>
+        <div id="addEditWindow"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    var popup = (function (popup) {
+        popup.width = 600;
+        popup.createDetailUrl = "@Url.Action("CreateGradeDetail")";
+        popup.createUrl = "@Url.Action("CreateGradeDetail")";
+        popup.editUrl = "@Url.Action("EditGradeDetail")";
+        popup.deleteUrl = "@Url.Action("DeleteGradeDetail")";
+        popup.createTitle = "Add Job Title";
+        popup.editTitle = "Edit Job Title";
+        return popup;
+    })(popup || {});
+
+</script>
+<script src="~/js/modules/pop-up.js"></script>

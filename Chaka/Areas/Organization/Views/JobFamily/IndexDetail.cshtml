@@ -1,0 +1,89 @@
+﻿@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+@model Chaka.ViewModels.Organization.JobFamily.IndexDetailViewModel
+
+<div class="head-section content-padding">
+    <h2 class="page-title"></h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Organization</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Job Family</li>
+        </ol>
+    </nav>
+</div>
+<style type="text/css">
+    .custombtn {
+        margin-right: 5px;
+        margin-bottom: 5px
+    }
+</style>
+<div class="container-fluid body-section bg-light-grey">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content-wrapper">
+                    <h3 class="content-title">Detail Job Family Major</h3>
+                    <div class="content-body">
+                        <table class="header-detail">
+                            <tr>
+                                <td>@Html.LabelFor(m => m.Code)</td>
+                                <td>: @Model.Code</td>
+                                <td></td>
+                                <td>@Html.LabelFor(m => m.Name)</td>
+                                <td>: @Model.Name</td>
+                            </tr>
+                            <tr>
+                                <td>@Html.LabelFor(m => m.Description)</td>
+                                <td colspan="4">: @Model.Description</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="content-wrapper">
+                    <div class="btn-group">
+                        <a href="@Url.Action("Index","JobFamily")" class="btn btn-info custombtn" style="font-size:12px;"><i class="fa fa-plus"></i> Back</a>
+                        <a data-id="@Model.EncryptJobFamilyID" href="javascript:;" class="btn btn-success custombtn" id="btnAddNewDetail" style="font-size:12px;"><i class="fa fa-plus"></i> List Major</a>
+                    </div>
+                    @Html.HiddenFor(m => m.JobFamilyID)
+                    <div class="content-body">
+                        @(Html.Kendo().Grid<Chaka.ViewModels.Organization.JobFamily.ListDetailViewModel>().Name("gridMapping").HtmlAttributes(new { @class = "ListAll" })
+                             .Columns(columns =>
+                             {
+                                 columns.Bound(m => m.Code).Title("Code").Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").ShowOperators(false)));
+                                 columns.Bound(m => m.Name).Title("Name").Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").ShowOperators(false)));
+                                 columns.Bound(m => m.ID).Visible(false);
+
+                             })
+                             .Pageable(s => s.Refresh(true))
+                             .PersistSelection(true)
+                             .Sortable()
+                             .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Read(read => read.Action("MajorList", "JobFamily", new { JobFamilyID = Model.EncryptJobFamilyID, area = "Organization" }))
+                            )
+                        )
+                    </div>
+                </div>
+            </div>
+            <div id="addEditWindow"></div>
+        </div>
+</div>
+
+
+
+<script>
+    var popup = (function (popup) {
+        popup.width = 210000;
+        popup.height = 900;
+        popup.createDetailUrl = "@Url.Action("EditDetail")";
+        popup.createUrl = "@Url.Action("EditDetail")";
+        popup.createTitle = "List Major";
+        return popup;
+    })(popup || {});
+</script>
+<script src="~/js/modules/pop-up.js"></script>
+

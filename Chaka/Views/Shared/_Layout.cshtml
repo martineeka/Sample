@@ -1,0 +1,133 @@
+﻿
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Chaka</title>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link href="~/lib/kendo-ui-core/2019.1.220/styles/kendo.common-material.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/kendo-ui-core/2019.1.220/styles/kendo.mobile.all.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/kendo-ui-core/2019.1.220/styles/kendo.material.min.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        #spinner {
+            display: block;
+            position: fixed;
+            z-index: 100;
+            background-color: #fff;
+            opacity: 0.4;
+            background-repeat: no-repeat;
+            background-position: center;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            top: 0;
+        }
+
+        .img_loader {
+            position: absolute;
+            margin: auto;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+    </style>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2019.1.220/js/jszip.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2019.1.220/js/kendo.all.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2019.1.220/js/kendo.aspnetmvc.min.js"></script>
+    <script src="~/js/app.js"></script>
+    <script src="~/js/sweetalert-dev.js"></script>
+    <script src="~/js/chaka.js"></script>
+    <script src="~/js/jquery.initialize.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="~/css/sweetalert.css" rel="stylesheet" />
+    <environment names="Development">
+        <link href="~/css/datatables.css" rel="stylesheet" />
+        <link href="~/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link href="~/css/styles.css" rel="stylesheet" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+
+        <link href="~/css/datatables.css" rel="stylesheet" />
+        <link href="~/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link href="~/css/styles.css" rel="stylesheet" />
+
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="~/css/sweetalert.css" rel="stylesheet" />
+
+        <link href="~/lib/kendo-ui-core/2019.1.220/styles/kendo.common-material.min.css" rel="stylesheet" type="text/css" />
+        <link href="~/lib/kendo-ui-core/2019.1.220/styles/kendo.mobile.all.min.css" rel="stylesheet" type="text/css" />
+        <link href="~/lib/kendo-ui-core/2019.1.220/styles/kendo.material.min.css" rel="stylesheet" type="text/css" />
+    </environment>
+
+</head>
+<body>
+    <div id="spinner" style="display:none;">
+
+    </div>
+    <div class="global-container">
+        <partial name="_Header.cshtml" />
+
+        <div class="body-container">
+            <partial name="_SideMenu.cshtml" />
+
+            <div class="main-container">
+                <div class="main-section">
+                    @RenderBody()
+                </div>
+                <div class="footer-section content-padding">
+                    <span>&copy; Copyright 2019</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    @RenderSection("scripts", required: false)
+
+    <script src="~/js/popper.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/scripts.js"></script>
+    <script src="~/js/datatables.js"></script>
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#BussinessGroupDDL").kendoDropDownList();
+
+            $("#BussinessGroupDDL").change(function () {
+                $("#spinner").show();
+                var id = $(this).val();
+                var UserID = 100;
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("UpdateCurrentBussinessGroupID","Account")",
+                    data: { CurrentBussinessGroupID: id, ID: UserID },
+                    success: function (result) {
+                        $("#spinner").hide();
+                        if (result.IsSuccess)
+                            location.reload();
+                        else
+                            alert(result.Message);
+                    },
+                    error: function (err) {
+                        $("#spinner").hide();
+                        console.log("Error Ajax");
+                    }
+                });
+
+            });
+        });
+    </script>
+</body>
+</html>

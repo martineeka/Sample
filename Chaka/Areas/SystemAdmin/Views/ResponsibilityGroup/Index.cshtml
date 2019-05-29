@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Kendo.Mvc.UI
+<div class="head-section content-padding">
+    <h2 class="page-title">Responsibility Group</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">System Admin</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Responsibility Group</li>
+        </ol>
+    </nav>
+</div>
+
+
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+                @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "general-table-form" }))
+                {
+                    @Html.ListBox("list-all-item", new List<SelectListItem>())
+                    @Html.ListBox("list-check", new List<SelectListItem>())
+
+                    <div class="btn-group">
+                        <a href="javascript:;" class="btn btn-primary" id="btnAddNew" style="font-size:12px;"><i class="fa fa-plus"></i> Add New</a>
+                        <button type="submit" class="btn btn-primary" id="btnDelete" name="btnDelete"><i class="fa fa-minus"></i> Delete</button>
+                    </div>
+                    @(Html.Kendo().Grid<Chaka.ViewModels.SystemAdmin.ResponsibilityGroup.ListResponsibilityGroupViewModel>
+                           ()
+                           .Name("grid")
+                           .Columns(columns =>
+                           {
+                                 columns.Bound("").ClientHeaderTemplate(@"<input type='checkbox' id='chkAll' onclick='checkAll()'/>")
+                                   .ClientTemplate(@"<input type='checkbox' class='Check' name='chkDelete' value='#=ID#' data-id='#=ID#' />")
+                                   .Width(50).HtmlAttributes(new { Class = "check-box-column" });
+                                 columns.Bound("").ClientTemplate("<a data-id='#=ID#' href='javascript:;' class='btn btn-primary  editRow'>Edit</a>").Width(100).Title("").Filterable(false);
+                                 columns.Bound("").ClientTemplate("<a data-id='#=ID#' href='" + Url.Action("IndexRespGroupDetail", new {resGroupID = "#=ID#"}) + "' class='btn btn-primary  '>Detail</a>").Width(100).Title("").Filterable(false);
+                                 columns.Bound(m => m.Code).Width(250).Title("Code");
+                                 columns.Bound(m => m.Name).Width(250).Title("Name");
+                                 columns.Bound(m => m.IsActive).Width(150).Title("Is Active").ClientTemplate("#= IsActive ? 'Active' : 'Not Active' #"); ;
+                                 columns.Bound(m => m.Description).Title("Description");
+                                 })
+                                 .PersistSelection()
+                                 .Pageable()
+                                 .Sortable()
+                                 .Filterable()
+                                 .DataSource(dataSource => dataSource
+                                 .Ajax()
+                                 .Read(read => read.Action("List", "ResponsibilityGroup", new { area = "SystemAdmin" }))
+                                 )
+                    )
+                }
+            </div>
+        </div>
+        <div id="addEditWindow"></div>
+    </div>
+</div>
+
+
+
+<script>
+    var popup = (function (popup) {
+        popup.width = 600;
+        popup.createUrl = "@Url.Action("Create")";
+        popup.editUrl = "@Url.Action("Edit")";
+        popup.deleteUrl = "@Url.Action("Delete")";
+        popup.createTitle = "Add Responsibility Group";
+        popup.editTitle = "Edit Responsibility Group";
+        return popup;
+    })(popup || {});
+</script>
+<script src="~/js/modules/pop-up.js"></script>
+

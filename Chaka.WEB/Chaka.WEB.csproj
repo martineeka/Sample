@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <UserSecretsId>19a420bc-b8d6-47c8-aa95-37926e7db337</UserSecretsId>
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.0.2105168" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="RestSharp" Version="106.6.9" />
+    <PackageReference Include="Telerik.UI.for.AspNet.Core.Trial" Version="2018.3.911" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\SystemAdmin\Data\" />
+    <Folder Include="Areas\SystemAdmin\Models\" />
+    <Folder Include="wwwroot\fonts\" />
+    <Folder Include="wwwroot\lib\modules\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Chaka.Providers\Chaka.Providers.csproj" />
+    <ProjectReference Include="..\Chaka.ViewModels\Chaka.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

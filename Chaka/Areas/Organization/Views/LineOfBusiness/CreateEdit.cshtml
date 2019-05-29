@@ -1,0 +1,49 @@
+﻿@model Chaka.ViewModels.Organization.LineOfBusiness.CreateEditViewModel
+
+@using Kendo.Mvc.UI
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addEditForm", name = "addEditForm" }))
+{
+    @Html.HiddenFor(m => m.ID)
+    @*@Html.HiddenFor(m => m.MaxSequenceLevel)*@
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Code) </div>
+            <div class="col-md-8">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                @Html.Kendo().TextBoxFor(m => m.Code).HtmlAttributes(new { @class = "form-control"})
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Name) </div>
+            <div class="col-md-8">
+                @Html.Kendo().TextBoxFor(m => m.Name).HtmlAttributes(new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Description) </div>
+            <div class="col-md-8">
+                <textarea class="form-control" name="Description" id="Description" required>@Model.Description</textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <button type="submit" id="btnSave" name="btnSave" class="btn btn-primary"><i class="fa fa-save"> Save</i></button>
+                <button type="button" id="btnClose" name="btnClose" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $("#btnClose").click(popup.closeClick);
+        $("#btnSave").click(popup.saveClick);
+    });
+
+
+</script>

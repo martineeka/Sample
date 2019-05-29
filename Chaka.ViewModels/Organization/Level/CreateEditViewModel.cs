@@ -1,0 +1,35 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+
+namespace Chaka.ViewModels.Organization.Level
+{
+    public class CreateEditViewModel
+    {
+        public string ID { get; set; }
+
+        [Required]
+        [StringLength(50, ErrorMessage = "Maximum 10 characters")]
+        [Remote(action:"ValidateLevelCode",controller: "Level", areaName:"Organization", AdditionalFields = "ID", ErrorMessage = "Level Code has been used jul")]
+        public string Code { get; set; }
+
+        [Required]
+        [StringLength(50, ErrorMessage = "Maximum 50 character")]
+        public string Name { get; set; }
+
+
+        [StringLength(500, ErrorMessage = "Maximum 500 characters")]
+        public string Description { get; set; }
+
+        [Required]
+        [Display(Name = "Sequence")]
+        public int Sequence { get; set; }
+
+        public int MaxSequenceLevel { get; set; }
+
+        [Display(Name = "Level Category")]
+        public int LevelCategoryID { get; set; }
+    }
+}

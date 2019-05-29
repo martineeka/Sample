@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Job Function";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+
+<div class="head-section content-padding">
+    <h2 class="page-title">Job Function</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Organization</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Job Function</li>
+        </ol>
+    </nav>
+</div>
+
+<style type="text/css">
+    .custombtn {
+        margin-right: 5px;
+        margin-bottom: 5px
+    }
+</style>
+
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+
+                @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "general-table-form" }))
+                {
+                    @Html.ListBox("list-all-item", new List<SelectListItem>())
+                    @Html.ListBox("list-check", new List<SelectListItem>())
+
+                    <div class="btn-group">
+                        <a href="javascript:;" class="btn btn-success custombtn" id="btnAddNew" style="font-size:12px;"><i class="fa fa-plus"></i> Add New</a>
+                        <button type="submit" class="btn btn-danger custombtn" id="btnDelete" name="btnDelete"><i class="fa fa-minus"></i> Delete</button>
+                    </div>
+                    @(Html.Kendo().Grid<Chaka.ViewModels.Organization.JobFunction.ListJobFunctionViewModel>
+                           ()
+                           .Name("grid")
+                           .Columns(col =>
+                           {
+                               col.Bound("").ClientHeaderTemplate(@"<input type='checkbox' id='chkAll' onclick='checkAll()'/>")
+                              .ClientTemplate(@"<input type='checkbox' class='Check' name='chkDelete' value='#=ID#' data-id='#=ID#' />")
+                              .Width(50).HtmlAttributes(new { Class = "check-box-column" });
+                               col.Bound("").ClientTemplate("<a data-id='#=ID#' href='javascript:;' class='btn btn-primary  editRow'>Edit</a>").Width(100).Title("").Filterable(false);
+                               col.Bound(p => p.Code).Title("Code");
+                               col.Bound(p => p.Name).Title("Name");
+                               col.Bound(p => p.Description).Title("Description");
+                           })
+                            .PersistSelection()
+                            .Pageable()
+                            .Sortable()
+                            .Filterable()
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Read(read => read.Action("List", "JobFunction", new { area = "Organization" }))
+                            )
+                    )
+                }
+            </div>
+        </div>
+        <div id="addEditWindow"></div>
+    </div>
+</div>
+
+<script>
+    var popup = (function (popup) {
+        popup.width = 600;
+        popup.height = 600;
+        popup.createUrl = "@Url.Action("Create")";
+        popup.editUrl = "@Url.Action("Edit")";
+        popup.deleteUrl = "@Url.Action("Delete")";
+        popup.createTitle = "Add Job Function";
+        popup.editTitle = "Edit Job Function";
+        return popup;
+    })(popup || {});
+</script>
+<script src="~/js/modules/pop-up.js"></script>
+

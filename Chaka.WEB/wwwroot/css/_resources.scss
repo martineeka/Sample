@@ -1,0 +1,132 @@
+// VARIABELS
+$red: #f44336;
+$pink: #e91e63;
+$purple: #9c27b0;
+$deep-purple: #673ab7;
+$indigo: #3f51b5;
+$blue: #2196f3;
+$light-blue: #03a9f4;
+$cyan: #00bcd4;
+$teal: #009688;
+$green: #4caf50;
+$light-green: #8bc34a;
+$lime: #cddc39;
+$yellow: #ffeb3b;
+$amber: #ffc107;
+$orange: #ff9800;
+$deep-orange: #ff5722;
+$brown: #795548;
+$grey: #9e9e9e;
+$deep-grey: #2d3436;
+$blue-grey: #607d8b;
+$light-grey: #f5f5f5;
+
+$custom-color: $blue;
+
+// COLORS
+.txt-red { color: $red; }
+.txt-pink { color: $pink; }
+.txt-purple { color: $purple; }
+.txt-deep-purple { color: $deep-purple; }
+.txt-indigo { color: $indigo; }
+.txt-blue { color: $blue; }
+.txt-light-blue { color: $light-blue; }
+.txt-cyan { color: $cyan; }
+.txt-teal { color: $teal; }
+.txt-green { color: $green; }
+.txt-light-green { color: $light-green; }
+.txt-lime { color: $lime; }
+.txt-yellow { color: $yellow; }
+.txt-amber { color: $amber; }
+.txt-orange { color: $orange; }
+.txt-deep-orange { color: $deep-orange; }
+.txt-brown { color: $brown; }
+.txt-grey { color: $grey; }
+.txt-light-grey { color: $light-grey; }
+.txt-blue-grey { color: $blue-grey; }
+.txt-black { color: black; }
+.txt-white { color: white; }
+
+.bg-red { background-color: $red; }
+.bg-pink { background-color: $pink; }
+.bg-purple { background-color: $purple;}
+.bg-deep-purple { background-color: $deep-purple; }
+.bg-indigo { background-color: $indigo; }
+.bg-blue { background-color: $blue; }
+.bg-light-blue { background-color: $light-blue; }
+.bg-cyan { background-color: $cyan; }
+.bg-teal { background-color: $teal; }
+.bg-green { background-color: $green; }
+.bg-light-green { background-color: $light-green; }
+.bg-lime { background-color: $lime; }
+.bg-yellow { background-color: $yellow; }
+.bg-amber { background-color: $amber; }
+.bg-orange { background-color: $orange; }
+.bg-deep-orange { background-color: $deep-orange; }
+.bg-brown { background-color: $brown; }
+.bg-grey { background-color: $grey; }
+.bg-light-grey { background-color: $light-grey; }
+.bg-blue-grey { background-color: $blue-grey; }
+.bg-black { background-color: black; }
+.bg-white { background-color: white; }
+
+.border-red { border: solid 1px $red; }
+.border-pink { border: solid 1px $pink; }
+.border-purple { border: solid 1px $purple; }
+.border-deep-purple { border: solid 1px $deep-purple; }
+.border-indigo { border: solid 1px $indigo; }
+.border-blue { border: solid 1px $blue; }
+.border-light-blue { border: solid 1px $light-blue; }
+.border-cyan { border: solid 1px $cyan; }
+.border-teal { border: solid 1px $teal; }
+.border-green { border: solid 1px $green; }
+.border-light-green { border: solid 1px $light-green; }
+.border-lime { border: solid 1px $lime; }
+.border-yellow { border: solid 1px $yellow; }
+.border-amber { border: solid 1px $amber; }
+.border-orange { border: solid 1px $orange; }
+.border-deep-orange { border: solid 1px $deep-orange; }
+.border-brown { border: solid 1px $brown; }
+.border-grey { border: solid 1px $grey; }
+.border-light-grey { border: solid 1px $light-grey; }
+.border-blue-grey { border: solid 1px $blue-grey; }
+.border-black { border: solid 1px black; }
+.border-white { border: solid 1px white; }
+
+@mixin x-btn($color) {
+    background-color: $color; 
+    color: white;
+    border: solid 2px $color;
+    border-radius: 0;
+    transition: all .2s;
+    display: inline-block;
+    padding: 5px 10px;
+    &:hover {background-color: white; color: $color; border: solid 2px $color;}
+}
+
+.btn-red { @include x-btn($red); }
+.btn-pink { @include x-btn($pink); }
+.btn-purple { @include x-btn($purple);}
+.btn-deep-purple { @include x-btn($deep-purple); }
+.btn-indigo { @include x-btn($indigo); }
+.btn-blue { @include x-btn($blue); }
+.btn-light-blue { @include x-btn($light-blue); }
+.btn-cyan { @include x-btn($cyan); }
+.btn-teal { @include x-btn($teal); }
+.btn-green { @include x-btn($green); }
+.btn-light-green { @include x-btn($light-green); }
+.btn-lime { @include x-btn($lime); }
+.btn-yellow { @include x-btn($yellow); }
+.btn-amber { @include x-btn($amber); }
+.btn-orange { @include x-btn($orange); }
+.btn-deep-orange { @include x-btn($deep-orange); }
+.btn-brown { @include x-btn($brown); }
+.btn-grey { @include x-btn($grey); }
+.btn-light-grey { @include x-btn($light-grey); color: $blue-grey!important; }
+.btn-blue-grey { @include x-btn($blue-grey); }
+.btn-black { @include x-btn(black); }
+
+// OTHER
+.radius-0 {border-radius: 0;}
+.content-padding {padding: 10px;}
+

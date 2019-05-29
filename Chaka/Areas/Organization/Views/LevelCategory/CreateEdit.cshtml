@@ -1,0 +1,82 @@
+﻿@model Chaka.ViewModels.Organization.LevelCategory.CreateEditViewModel
+
+@using Kendo.Mvc.UI
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addEditForm", name = "addEditForm" }))
+{
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.MaxSequenceLevel)
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Code) </div>
+            <div class="col-md-8">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                <input type="text" name="Code" class="form-control" value="@(Model.Code)" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Name) </div>
+            <div class="col-md-8">
+                <input type="text" name="Name" class="form-control" value="@(Model.Name)" style="resize: none; width: 99%; padding: 2px 0;text-indent: .7em;">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Sequence)</div>
+            <div class="col-md-8">
+                <span class="required-field"><i class="fa fa-asterisk"></i></span>
+                @Html.Kendo().DropDownListFor(m => m.Sequence)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">@Html.LabelFor(m => m.Description)</div>
+            <div class="col-md-8">
+                @Html.EditorFor(m => m.Description, "Description")
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-3"></div>
+            <div class="col-md-7">
+                <button type="submit" id="btnSave" name="btnSave" class="btn btn-primary">Save</button>
+                <button type="button" id="btnClose" name="btnClose" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $("#btnClose").click(popup.closeClick);
+        $("#btnSave").click(popup.saveClick);
+    });
+
+     $(document)
+        .ready(function() {
+            var totalSeq = $("#MaxSequenceLevel").val();
+            if ($("#ID").val() == 0)
+                totalSeq = parseInt(totalSeq) + 1;
+
+            var res = [{ text: "Select", value: "" }];
+
+            for (var i = 1; i <= totalSeq; i++) {
+                var data = { text: i, value: i };
+                res.push(data);
+            }
+            // create DropDownList from input HTML element
+            $("#Sequence")
+                .kendoDropDownList({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    dataSource: res
+                });
+            //Set Value DropDown Sequence
+            if ($("#ID").val() == 0)
+                $("#Sequence").data("kendoDropDownList").value(totalSeq);
+            else
+                $("#Sequence").data("kendoDropDownList").value(@Model.Sequence);
+        });
+</script>

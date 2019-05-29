@@ -1,0 +1,100 @@
+﻿@model Chaka.ViewModels.Organization.Country.IndexCityViewModel
+@{
+
+    ViewData["Title"] = "Province";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Kendo.Mvc.UI
+
+<div class="head-section content-padding">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Organization</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index","Country")">Country</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("IndexProvince","Country")">Province</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="#">City</a></li>
+        </ol>
+    </nav>
+</div>
+
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+                <table class="table table-responsive">
+                    <tr>
+                        <th>@Html.LabelFor(m => m.CountryCode)</th>
+                        <td>@Model.CountryCode</td>
+
+                    </tr>
+                    <tr>
+                        <th>@Html.LabelFor(m => m.CountryName)</th>
+                        <td>@Model.CountryName</td>
+
+                    </tr>
+                    <tr>
+                        <th>@Html.LabelFor(m => m.ProvinceName)</th>
+                        <td>@Model.ProvinceName</td>
+
+                    </tr>
+
+                </table>
+                @*<a data-id="@Model.ID" href="javascript:;" class="btn btn-primary" id="btnAddNewDetail" style="font-size:12px;"><i class="fa fa-plus"></i> Add New</a>*@
+
+                @*@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "general-table-form" }))
+                    {*@
+                @Html.ListBox("list-all-item", new List<SelectListItem>())
+                @Html.ListBox("list-check", new List<SelectListItem>())
+
+                <div class="btn-group">
+                    <a href="javascript:;" data-id="@Model.ProvinceID" class="btn btn-primary" id="btnAddNewDetail" style="font-size:12px;"><i class="fa fa-plus"></i> Add New</a>
+                    <button type="submit" class="btn btn-primary" id="btnDelete" name="btnDelete"><i class="fa fa-minus"></i> Delete</button>
+                </div>
+                @(Html.Kendo().Grid<Chaka.ViewModels.Organization.Country.ListCityViewModel>
+                      ()
+                      .Name("grid")
+                      .Columns(col =>
+                      {
+                           col.Bound("").ClientHeaderTemplate(@"<input type='checkbox' id='chkAll' onclick='checkAll()'/>")
+                                .ClientTemplate(@"<input type='checkbox' class='Check' name='chkDelete' value='#=ID#' data-id='#=ID#' />")
+                                .Width(50).HtmlAttributes(new { Class = "check-box-column" });
+                                 col.Bound("").ClientTemplate("<a data-id='#=ID#' href='javascript:;' class='btn btn-primary  editRow'>Edit</a>").Width(100).Title("").Filterable(false);
+                          col.Bound(p => p.Code);
+                          col.Bound(p => p.Name);
+                          col.Bound(p => p.Description);
+                          col.Bound("").ClientTemplate("#= IsActive ? 'Yes':'No' #");
+                          //col.Bound(p => p.Check);
+                      })
+                            .PersistSelection()
+                            .Pageable()
+                            .Sortable()
+                            .Filterable()
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Read(read => read.Action("ListCity", "Country", new { provinceID = Model.ProvinceID, area = "Organization" }))
+                            )
+                )
+                <br />
+
+
+                @*}*@
+            </div>
+        </div>
+        <div id="addEditWindow"></div>
+    </div>
+</div>
+
+<script>
+    var popup = (function (popup) {
+        popup.width = 1200;
+        popup.createDetailUrl = "@Url.Action("CreateCity")";
+        popup.createUrl = "@Url.Action("CreateCity")";
+        popup.editUrl = "@Url.Action("EditCity")";
+        popup.deleteUrl = "@Url.Action("DeleteCity")";
+        popup.createTitle = "Add City";
+        popup.editTitle = "Edit City";
+        return popup;
+    })(popup || {});
+</script>
+<script src="~/js/modules/pop-up.js"></script>

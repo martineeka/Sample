@@ -1,0 +1,30 @@
+@media only screen and (max-width: 1024px) {
+    div.left-section {
+        flex-basis: 25%;
+    }
+
+    div.right-section {
+        flex-basis: 75%;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    div.main-container {
+        margin-left: 0;
+    }
+
+    div.side-nav-container {
+        width: 0;
+        box-shadow: 1px 1px 5px $deep-grey;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    div.title-container {
+        width: auto;
+    }
+
+    div.text-section {
+        display: none;
+    }
+}

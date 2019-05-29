@@ -1,0 +1,162 @@
+﻿@model Chaka.ViewModels.Organization.OrgUnitChange.IndexDetailViewModel
+@{
+    ViewData["Title"] = "Organization Unit Change Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+
+<div class="head-section content-padding">
+    <h2 class="page-title">Organization Unit Change - Detail</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Organization</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index","OrganizationUnitChange")">Organization Unit Change</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Detail</li>
+        </ol>
+    </nav>
+</div>
+
+
+<div class="container-fluid body-section bg-light-grey">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="content-wrapper">
+                @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "general-table-form" }))
+                {
+                    @Html.ListBox("list-all-item", new List<SelectListItem>())
+                    @Html.ListBox("list-check", new List<SelectListItem>())
+                    @Html.ValidationSummary()
+                    <table class="header-detail">
+                        <tr>
+                            <td>Request Date</td>
+                            <td>: @Model.TanggalRequest</td>
+                        </tr>
+                        <tr>
+                            <td>Organization Unit</td>
+                            <td>: @Model.OrgUnit</td>
+                        </tr>
+                        <tr>
+                            <td>Start Date</td>
+                            <td>: @Model.StartDate</td>
+                        </tr>
+                        <tr>
+                            <td>End Date</td>
+                            <td>: @Model.EndDate</td>
+                        </tr>
+                    </table>
+
+                    <div class="btn-group">
+                        <a data-id="@Model.ID" href="@Url.Action("CreateDetail","OrganizationUnitChange", new { orgChangeID = Model.ID})" class="btn btn-primary" id="btnAddNew"><i class="fa fa-plus"></i> Versioning</a>
+                        <button type="submit" class="btn btn-primary" id="btnDelete" name="btnDelete"><i class="fa fa-minus"></i> Delete</button>
+                        <span class="checked-info pull-right">
+                            <span id="checked-refresh" class="btn btn-primary" title="refresh grid"><i class="fa fa-refresh"></i></span>
+                            <span id="checked-select" class="btn btn-primary" title="select all on grid"><i class="fa fa-check-square-o"></i></span>
+                            <span id="checked-clear" class="btn btn-primary" title="clear selection"><i class="fa fa-minus-square-o"></i></span>
+                            <kbd><i class="fa fa-lightbulb-o"></i> <span id="checked-info-text"></span></kbd>
+                        </span>
+                    </div>
+                    @(Html.Kendo().Grid<Chaka.ViewModels.Organization.OrgUnitChange.ListOrgUnitChangeDetailViewModel>()
+                           .Name("grid")
+                           .Columns(col =>
+                           {
+                               col.Bound("").ClientHeaderTemplate(@"<input type='checkbox' id='chkAll' onclick='checkAll()'/>")
+                                   .ClientTemplate(@"<input type='checkbox' class='Check' name='chkDelete' value='#=ID#' data-id='#=ID#' />")
+                                   .Width(50).HtmlAttributes(new { Class = "check-box-column" });
+                               col.Bound("").ClientTemplate((@"#if(OrgUnitID!=0){#<a data-id='#=ID#' href='javascript:;' class='btn btn-primary  editRow' id='edit'>Change</a>#}#")).Width(100).Title("").Filterable(false);
+                               col.Bound(p => p.OrgUnitID);
+                               col.Bound(p => p.Code);
+                               col.Bound(p => p.Name);
+                               col.Bound(p => p.CostCenter);
+                               col.Bound(p => p.Description);
+                               col.Bound(p => p.Superior);
+                               col.Bound(p => p.OrganizationLevel);
+                               col.Bound(p => p.BeginEff).Format("{0: dd MMM yyyy}");
+                               col.Bound(p => p.LastEff).Format("{0: dd MMM yyyy}");
+                               col.Bound(p => p.ParentOrgUnit);
+                               col.Bound(p => p.Category);
+                               col.Bound(p => p.IsLegalEntity);
+                               col.Bound(p => p.Status);
+                           }).PersistSelection()
+                             .Pageable()
+                             .Sortable()
+                             .Filterable(filter =>
+                             {
+                                 filter.Extra(false);
+                                 filter.Operators(op =>
+                                 {
+                                     op.ForString(str => str.Clear());
+                                     op.ForString(str =>
+                                     {
+                                         str.Clear().Contains("Contains");
+                                     });
+                                 });
+                             })
+                             .DataSource(dataSource => dataSource
+                             .Ajax()
+                             .Read(read => read.Action("DetailList", "OrganizationUnitChange", new { area = "Organization", orgChangeID = Model.ID }))))
+                }
+            </div>
+        </div>
+        <div id="addEditWindow"></div>
+    </div>
+</div>
+
+
+<script>
+    var popup = (function (popup) {
+        popup.width = 600;
+        popup.createUrl = "@Url.Action("CreateDetail","OrganizationUnitChange", new { orgChangeID = Model.ID})";
+        popup.editUrl = "@Url.Action("EditDetail")";
+        popup.deleteUrl = "@Url.Action("DeleteDetail")";
+        popup.createTitle = "Organization Unit Change Detail";
+        popup.editTitle = "Edit Organization Unit Change Detail";
+        return popup;
+    })(popup || {});
+</script>
+<script src="~/js/modules/pop-up.js"></script>
+
+
+<script>
+    function startChange()
+    {
+        var endPicker = $("#LastEff").data("kendoDatePicker"),
+            startDate = this.value;
+
+        if (startDate)
+        {
+            startDate = new Date(startDate);
+            startDate.setDate(startDate.getDate());
+            endPicker.min(startDate);
+        }
+    }
+
+    function endChange()
+    {
+        var startPicker = $("#BeginEff").data("kendoDatePicker"),
+            endDate = this.value;
+
+        if (endDate)
+        {
+            endDate = new Date(endDate);
+            endDate.setDate(endDate.getDate());
+            startPicker.max(endDate);
+        }
+    }
+
+    function isLegalChange()
+    {
+        if ($('#IsLegalEntity').is(":checked"))
+        {
+            $("#LegalEntityInformationID").data("kendoDropDownList").readonly(false);
+        }
+        else
+        {
+            $("#LegalEntityInformationID").data("kendoDropDownList").readonly(true);
+        }
+    }
+
+    $("#grid").kendoGrid({
+    dataSource: ds,
+    rowTemplate: '<tr class="#:Status==\"Add\"? \"red\" : \"yellow\"#" data-uid="#= uid #"><td>#: name #</td><td>#:ReportClassDescription #</td></tr>'
+});
+</script>

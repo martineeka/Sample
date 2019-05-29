@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Chaka.Database.Context\Chaka.Database.Context.csproj" />
+    <ProjectReference Include="..\Chaka.Providers\Chaka.Providers.csproj" />
+    <ProjectReference Include="..\Chaka.Utilities\Chaka.Utilities.csproj" />
+    <ProjectReference Include="..\Chaka.ViewModels\Chaka.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
