@@ -34,9 +34,9 @@ namespace Chaka.Areas.Organization.Controllers
             try
             {
                 var json = Utilities.GridUtilities.ConvertKendoRequestToJson(request);
-                var endpoint = String.Format("{0}{1}", url, Route.Get); 
+                var endpoint = String.Format("{0}{1}", url, Route.Get);
 
-                var result = Utilities.RestAPIHelper<CustomDataSourceResult<ListLevelViewModel>>.Submit(json, Method.POST, endpoint);
+                var result = Utilities.RestAPIHelper<CustomDataSourceResult<ListLevelViewModel>>.Submit(json, Method.POST, endpoint, Request);
 
                 newDataSourceResult.Data = result.data;
                 newDataSourceResult.Total = result.total;
@@ -57,7 +57,7 @@ namespace Chaka.Areas.Organization.Controllers
         public ActionResult Create()
         {
             var model = new CreateEditViewModel();
-            var endpoint = String.Format("{0}{1}", url, Route.MaxSequenceLevel); 
+            var endpoint = String.Format("{0}{1}", url, Route.MaxSequenceLevel);
             model.MaxSequenceLevel = Utilities.RestAPIHelper<int>.Submit("", Method.GET, endpoint);
             return PartialView("CreateEdit", model);
         }
@@ -141,7 +141,7 @@ namespace Chaka.Areas.Organization.Controllers
             try
             {
                 string json = JsonConvert.SerializeObject(arrayOfID);
-                var endpoint = String.Format("{0}{1}/{2}", url, Route.Delete, json); 
+                var endpoint = String.Format("{0}{1}/{2}", url, Route.Delete, json);
                 Utilities.RestAPIHelper<string>.Submit("", Method.POST, endpoint);
                 ajaxViewModel.SetValues(true, null, "Deleted Successfully");
             }

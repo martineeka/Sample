@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Chaka.Api.Organization.Controllers
 {
-   
+    [Authorize]
     [Route("api/Organization/[controller]")]
     public class LevelController : ControllerBase
     {

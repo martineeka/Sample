@@ -30,7 +30,7 @@ namespace Chaka.Areas.SystemAdmin.Controllers
             DataSourceResult newDataSourceResult = new DataSourceResult();
             try
             {
-                DataClaim.GetClaim(Request);
+                //DataClaim.GetClaim(Request);
                 var json = Utilities.GridUtilities.ConvertKendoRequestToJson(request);
 
                 var urlEndPoint = url + Route.Get;
